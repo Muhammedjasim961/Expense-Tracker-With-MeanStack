@@ -1,9 +1,0 @@
-.AddButton {
-  cursor: pointer;
-  position: sticky !important;
-  width: fit-content;
-  left: 25px;
-}
-.AddButton:hover {
-  color: brown;
-}
