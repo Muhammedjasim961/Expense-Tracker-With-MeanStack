@@ -1,0 +1,52 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table
+    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+  >
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    >
+      <tr class="border-blue-400">
+        <th scope="col" class="px-6 py-3">Expense name</th>
+        <th scope="col" class="px-6 py-3">Amount</th>
+        <th scope="col" class="px-6 py-3">Expense Date</th>
+        <th scope="col" class="px-6 py-3">Expense Payment Date</th>
+        <th scope="col" class="px-6 py-3">Expense Category</th>
+        <th scope="col" class="px-6 py-3">Comments</th>
+        <th scope="col" class="px-6 py-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let expense of expenses; let i = index"
+        class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
+      >
+        <th
+          scope="row"
+          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+        >
+          {{ expense.expense_name }}
+        </th>
+
+        <!-- <td class="px-6 py-4">{{ expense.expense_name }}</td> -->
+        <td class="px-6 py-4">{{ expense.amount }}</td>
+        <td class="px-6 py-4">{{ expense.expense_date }}</td>
+        <td class="px-6 py-4">{{ expense.expense_payment_date }}</td>
+        <td class="px-6 py-4">{{ expense.expense_category }}</td>
+        <td class="px-6 py-4">{{ expense.comments }}</td>
+        <td class="px-6 py-4">
+          <a
+            routerLink="/edit"
+            class="font-medium mr-2 text-blue-600 dark:text-blue-500 hover:underline"
+            >Edit</a
+          >
+          <button
+            (click)="deleteExpenses(expense, i)"
+            class="font-bold cursor-pointer text-red-600 dark:text-blue-500 hover:underline"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

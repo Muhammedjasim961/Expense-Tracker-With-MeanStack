@@ -1,0 +1,243 @@
+<div class="backArrowBts">
+  <a routerLink="/dashboard">
+    <svg
+      class="w-[40px] h-[40px] text-gray-800 dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z"
+      />
+    </svg>
+  </a>
+</div>
+
+<form class="max-w-md mx-auto userForm" [formGroup]="userForm">
+  <!-- Form valid: {{ userForm.status }} -->
+  <div class="relative z-0 w-full mb-5 group">
+    <input
+      formControlName="expense_name"
+      type="text"
+      name="floating_expense_name"
+      id="floating_expense_name"
+      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      placeholder=" "
+      required
+    />
+    <label
+      for="floating_expense_name"
+      class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+      ><b>Expense Name <span class="redstar"> * </span></b></label
+    >
+    <div
+      *ngIf="
+        userForm.get('expense_name')?.invalid &&
+        userForm.get('expense_name')?.touched
+      "
+      class="errorText"
+    >
+      <small *ngIf="userForm.get('expense_name')?.errors?.['required']">
+        Expense Name is required.
+      </small>
+
+      <small *ngIf="userForm.get('expense_name')?.errors?.['minlength']">
+        Expense Name must be at least 3 characters.
+      </small>
+      <small *ngIf="userForm.get('expense_name')?.errors?.['maxlength']">
+        Expense Name should be MAXIMUM 10 characters.
+      </small>
+    </div>
+  </div>
+  <div class="relative z-0 w-full mb-5 group">
+    <input
+      formControlName="amount"
+      type="number"
+      name="floating_amount"
+      id="floating_amount"
+      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      placeholder=" "
+      required
+    />
+    <label
+      for="floating_amount"
+      class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+      ><b>Amount <span class="redstar"> * </span></b></label
+    >
+    <div
+      *ngIf="userForm.get('amount')?.invalid && userForm.get('amount')?.touched"
+      class="errorText"
+    >
+      <small *ngIf="userForm.get('amount')?.errors?.['required']">
+        Amount is required.
+      </small>
+
+      <small *ngIf="userForm.get('amount')?.errors?.['minlength']">
+        Amount must be at least 1 characters.
+      </small>
+      <small *ngIf="userForm.get('amount')?.errors?.['max']">
+        Amount should be Below 1 Crore.
+      </small>
+    </div>
+  </div>
+  <div class="relative z-0 w-full mb-5 group">
+    <input
+      type="date"
+      formControlName="expense_date"
+      name="floating_expense_date"
+      id="floating_expense_date"
+      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      placeholder=" "
+      required
+    />
+    <label
+      for="floating_expense_date"
+      class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+      ><b>Expense Date</b> <span class="redstar"> * </span></label
+    >
+    <div
+      *ngIf="
+        userForm.get('expense_date')?.invalid &&
+        userForm.get('expense_date')?.touched
+      "
+      class="errorText"
+    >
+      <small *ngIf="userForm.get('expense_date')?.errors?.['required']">
+        Date is required.
+      </small>
+    </div>
+  </div>
+  <div class="grid md:grid-cols-2 md:gap-6">
+    <div class="relative z-0 w-full mb-5 group">
+      <input
+        formControlName="expense_payment_date"
+        type="date"
+        name="floating_expenses_payment_date"
+        id="floating_expenses_payment_date"
+        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        placeholder=" "
+        required
+      />
+      <label
+        for="floating_expenses_payment_date"
+        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        ><b>Expense Payment Date</b></label
+      >
+      <div
+        *ngIf="
+          userForm.get('expense_payment_date')?.invalid &&
+          userForm.get('expense_payment_date')?.touched
+        "
+        class="errorText"
+      >
+        <small
+          *ngIf="userForm.get('expense_payment_date')?.errors?.['required']"
+        >
+          Expense Payment Date is required.
+        </small>
+      </div>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+      <input
+        formControlName="expense_category"
+        type="text"
+        name="floating_expenses_category"
+        id="floating_expenses_category"
+        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        placeholder=" "
+        required
+      />
+      <label
+        for="floating_expenses_category"
+        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        ><b>Expense Category <span class="redstar"> * </span></b></label
+      >
+      <div
+        *ngIf="
+          userForm.get('expense_category')?.invalid &&
+          userForm.get('expense_category')?.touched
+        "
+        class="errorText"
+      >
+        <small *ngIf="userForm.get('expense_category')?.errors?.['required']">
+          Expense Category is required.
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="relative z-0 w-full group">
+    <label
+      for="floating_comments"
+      class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+      ><b>Comments</b></label
+    >
+    <br />
+    <div
+      *ngIf="
+        userForm.get('comments')?.invalid && userForm.get('comments')?.touched
+      "
+      class="errorText"
+    >
+      <small *ngIf="userForm.get('comments')?.errors?.['required']">
+        Comments are required.
+      </small>
+    </div>
+    <textarea
+      formControlName="comments"
+      name="floating_comments"
+      id="floating_comments"
+      rows="2"
+      class="block p-2.5 w-full text-sm mb-2 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      placeholder="Leave a comment..."
+    ></textarea>
+  </div>
+
+  <button
+    *ngIf="!loading"
+    (click)="submitUserDetails()"
+    [disabled]="userForm.invalid || loading"
+    type="button"
+    class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 disabled:opacity-50 enabled:cursor-pointer disabled:cursor-not-allowed"
+  >
+    <!-- <ng-container *ngIf="!loading; else spinnerTpl"> Submit </ng-container> -->
+    Submit
+  </button>
+
+  <button
+    type="reset"
+    class="text-white bg-gradient-to-r cursor-pointer from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+  >
+    Clear
+  </button>
+</form>
+
+<div *ngIf="loading" class="flex items-center justify-center">
+  <svg
+    class="animate-spin h-8 w-8 text-green-500"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle
+      class="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      stroke-width="4"
+    ></circle>
+    <path
+      class="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+    ></path>
+  </svg>
+  <span class="ml-2">Loading...</span>
+  <app-spinner></app-spinner>
+</div>
+<!-- <button mat-raised-button color="primary" (click)="showMessage()">
+  Show Snackbar
+</button> -->
