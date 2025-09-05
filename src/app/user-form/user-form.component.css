@@ -1,0 +1,16 @@
+.backArrowBts {
+  position: sticky;
+  left: 40px;
+  margin-top: 20px;
+  width: fit-content;
+}
+.userForm {
+  margin-top: -40px;
+}
+.redstar {
+  color: red;
+}
+/* button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+} */
