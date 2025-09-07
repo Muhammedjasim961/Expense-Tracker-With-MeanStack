@@ -1,6 +1,7 @@
-<<<<<<< HEAD
-"# Expense-Tracker-With-MeanStack" 
-=======
+# Expense-Tracker-With-MeanStack
+
+# Users can track their Expense through their career
+
 # Frontend
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.12.
@@ -60,4 +61,5 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
->>>>>>> be81eadad3b40869ff916a0394a39b6162028e50
+
+> > > > > > > be81ead (Initial commit for frontend)

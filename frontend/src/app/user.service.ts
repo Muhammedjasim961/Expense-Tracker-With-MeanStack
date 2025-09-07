@@ -7,6 +7,7 @@ import { User } from './user';
 })
 export class UserService {
   loginUser = 'http://localhost:3005/login';
+  userExits = 'http://localhost:3005/';
   registerUser = 'http://localhost:3005/register';
   getExpenses = 'http://localhost:3005';
   insertExpenses = 'http://localhost:3005/insertExpense';
@@ -29,6 +30,9 @@ export class UserService {
   }
   registerUserData(user: any) {
     return this.http.post<User>(this.registerUser, user);
+  }
+  checkingUserExits(username: any, email: any): Observable<any> {
+    return this.http.get<User[]>(this.userExits, username);
   }
   // DeleteExpense(id: number) {
   //   return this.http.delete(`${this.DeleteExpense}/expenses/${id}`);

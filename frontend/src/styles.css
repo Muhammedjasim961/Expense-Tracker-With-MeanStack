@@ -26,3 +26,13 @@ body {
   font-weight: 500;
   letter-spacing: 1px;
 }
+.snackbar-logOut {
+  background-color: rgb(254, 153, 52) !important; /* Tailwind green-500 */
+  color: wheat !important;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.active-link {
+  @apply md:text-sky-500 underline  md:dark:text-blue-200;
+}

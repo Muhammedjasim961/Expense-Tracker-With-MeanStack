@@ -36,12 +36,28 @@ export class RegisterComponent {
   });
   registerUserFormDetails() {
     this.userService
-      .registerUserData(this.registerForm.value)
+      .checkingUserExits(
+        this.registerForm.value.username,
+        this.registerForm.value.email
+      )
       .subscribe((result) => {
-        this.router.navigate(['login']);
-        this.showMessage();
+        if (result.length) {
+          alert(`user ${this.registerForm.value.username} already exits`);
+          // console.log( `user ${this.registerForm.value.username} exits checking`,result);
+        }
+        this.userService
+          .registerUserData(this.registerForm.value)
+          .subscribe((result) => {
+            const setUsernameToLocal = localStorage.setItem(
+              'username',
+              this.registerForm.value.username || ''
+            );
+            console.log('username from register', setUsernameToLocal);
+            this.router.navigate(['login']);
+            this.showMessage();
 
-        console.log('register', result);
+            console.log('register', result);
+          });
       });
   }
   showMessage() {

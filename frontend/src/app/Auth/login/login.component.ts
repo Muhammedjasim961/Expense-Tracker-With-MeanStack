@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
 import { Router } from '@angular/router';
@@ -18,6 +18,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class LoginComponent {
   // users: User = { email: '', password: '' };
   errorMsg = '';
+  username: any = '';
+  @Output() setUserProfileEvent = new EventEmitter<any>();
 
   loginForm = new FormGroup({
     email: new FormControl('', [
@@ -39,20 +41,28 @@ export class LoginComponent {
     private router: Router,
     private _snackBar: MatSnackBar
   ) {
-    this.loginForm.valueChanges.subscribe((values) => {
-      // this.users = values as User; // ✅ only values, not validators
-      // console.log('Live Users JSON:', this.users);
-    });
+    // this.UserService.registerUserData(this.username).subscribe((result) => {
+    //   console.log('from logging checking user name', result);
+    // });
   }
-
+  //user login checking with email and password
   login() {
     this.UserService.userLogin(
       this.loginForm.value.email,
       this.loginForm.value.password
     ).subscribe({
       next: (result) => {
-        localStorage.setItem('token', result.token);
-        this.router.navigate(['dashboard']);
+        localStorage.setItem('token', result.message);
+        const setEmailInLocal = localStorage.setItem(
+          'email',
+          this.loginForm.value.email || ''
+        );
+        console.log('setEmailInLocal', setEmailInLocal);
+
+        this.router.navigate(['dashboard']).then(() => {
+          //to reload the page to display sign out button
+          window.location.reload();
+        });
         this.showMessage();
       },
       error: (err) => {
