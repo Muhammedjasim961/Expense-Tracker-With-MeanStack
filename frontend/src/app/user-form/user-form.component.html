@@ -116,16 +116,18 @@
       <select
         formControlName="expense_payment_type"
         id="underline_select"
-        class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+        class="block py-2.5 font-bold px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
       >
-        <option value="Choose a Payment Type" disabled>
+        <option value="Choose a Payment Type">
           <b>Choose a Payment Type</b>
         </option>
-        <option value="Card">Card</option>
-        <option value="Cash">Cash</option>
-        <option value="UPI">UPI</option>
-        <option value="Net Banking">Net Banking</option>
-        <option value="PeyPal">PeyPal</option>
+        <div class="text-amber-600">
+          <option class="font-bold" value="Net Banking">Google Pay</option>
+          <option class="font-bold" value="PeyPal">PeyPal</option>
+          <option class="font-bold" value="Cash">Cash</option>
+          <option class="font-bold" value="Card">Card</option>
+          <option class="font-bold" value="UPI">UPI</option>
+        </div>
       </select>
       <!-- <input
         formControlName="expense_payment_date"

@@ -13,6 +13,8 @@ export class UserService {
   insertExpenses = 'http://localhost:3005/insertExpense';
   DeleteOneExpense = 'http://localhost:3005/deleteExpense/';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  //with a BehaviorSubject (reactive variable) that tells the whole app whether the user is logged in or not.
+
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
   constructor(private http: HttpClient) {}
 
@@ -23,7 +25,6 @@ export class UserService {
   }
   // { headers: { 'Content-Type': 'application/json' } }
 
-  //with a BehaviorSubject (reactive variable) that tells the whole app whether the user is logged in or not.
   // login() {
   //   // localStorage.setItem('username', username);
   //   // localStorage.setItem('token', token);
@@ -32,7 +33,7 @@ export class UserService {
     localStorage.clear();
     this.isLoggedInSubject.next(false); // 🔔 notify logout
   }
-
+  //Just checks if a token exists  used when the app starts to know if user is still logged in.
   private hasToken(): boolean {
     return !!localStorage.getItem('token');
   }

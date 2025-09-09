@@ -60,10 +60,10 @@ export class LoginComponent {
           localStorage.setItem('username', result.user.username);
           console.log(result.user.email);
         }
-        //this reload for
+        //this is for sign out button
         this.UserService.userLogin('', '');
         this.router.navigate(['dashboard']).then(() => {
-          this.showMessage(); // ✅ snackbar works bottom center
+          this.showMessage();
         });
       },
       error: (err) => {

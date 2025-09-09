@@ -32,10 +32,14 @@
 
         <!-- <td class="px-6 py-4 text-center" *ngIf="!expense">No datas</td> -->
         <td class="px-6 py-4">{{ expense.amount }}</td>
-        <td class="px-6 py-4">{{ expense.expense_date }}</td>
+        <td class="px-6 py-4">
+          <!-- this is build in angular pipe -->
+          {{ expense.expense_date | date : "dd-MM-yyyy" }}
+        </td>
         <td class="px-6 py-4">{{ expense.expense_payment_type }}</td>
         <td class="px-6 py-4">{{ expense.expense_category }}</td>
         <td class="px-6 py-4">{{ expense.comments }}</td>
+
         <td class="px-6 py-4">
           <a
             routerLink="/edit"

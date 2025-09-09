@@ -11,7 +11,7 @@ import ApexCharts from 'apexcharts';
 export class DashboardComponent implements OnInit {
   username: any = '';
   constructor() {
-    // this.username = localStorage.getItem('username');
+    this.username = localStorage.getItem('username');
   }
   ngOnInit(): any {
     initFlowbite();
