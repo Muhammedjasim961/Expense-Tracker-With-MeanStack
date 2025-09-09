@@ -36,36 +36,39 @@ export class RegisterComponent {
   });
   registerUserFormDetails() {
     this.userService
-      .checkingUserExits(
-        this.registerForm.value.username,
-        this.registerForm.value.email
-      )
+      .checkingUserExits(this.registerForm.value.username)
       .subscribe((result) => {
         if (result.length) {
-          alert(`user ${this.registerForm.value.username} already exits`);
+          alert(
+            `user ${this.registerForm.value.username} already exits AND Check Out Your Email Also!`
+          );
           // console.log( `user ${this.registerForm.value.username} exits checking`,result);
         }
         this.userService
           .registerUserData(this.registerForm.value)
           .subscribe((result) => {
-            const setUsernameToLocal = localStorage.setItem(
-              'username',
-              this.registerForm.value.username || ''
-            );
-            console.log('username from register', setUsernameToLocal);
             this.router.navigate(['login']);
-            this.showMessage();
+            if (this.registerForm.valid) {
+              const email: any = this.registerForm.value.email;
+              localStorage.setItem('email', email);
+            }
+            const username: any = this.registerForm.value.username;
+            localStorage.setItem('username', username);
 
+            this.showMessage();
             console.log('register', result);
           });
       });
   }
   showMessage() {
     this._snackBar.open('Registered successfully!', 'Close', {
-      duration: 3000,
+      duration: 1500,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       panelClass: ['snackbar-success'], // 👈 custom class
     });
+  }
+  clearForm() {
+    this.registerForm.reset();
   }
 }

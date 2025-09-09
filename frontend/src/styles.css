@@ -5,6 +5,7 @@
 @source "../node_modules/flowbite";
 body {
   margin: 0;
+  padding: 0;
 }
 .redstar {
   color: red;
@@ -28,7 +29,7 @@ body {
 }
 .snackbar-logOut {
   background-color: rgb(254, 153, 52) !important; /* Tailwind green-500 */
-  color: wheat !important;
+  color: white !important;
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
   letter-spacing: 1px;

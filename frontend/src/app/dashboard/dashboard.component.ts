@@ -9,6 +9,10 @@ import ApexCharts from 'apexcharts';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
+  username: any = '';
+  constructor() {
+    // this.username = localStorage.getItem('username');
+  }
   ngOnInit(): any {
     initFlowbite();
   }

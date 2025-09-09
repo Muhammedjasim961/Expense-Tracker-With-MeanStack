@@ -13,12 +13,10 @@ const ExpenseSchema = mongoose.Schema({
   expense_date: {
     type: Date,
     require: [true, "Type expense date"],
-    default: Date.now,
   },
-  expense_payment_date: {
-    type: Date,
-    require: [true, "Type payment Date"],
-    default: Date.now,
+  expense_payment_type: {
+    type: String,
+    require: [true, "Type payment Type"],
   },
   expense_category: {
     type: String,

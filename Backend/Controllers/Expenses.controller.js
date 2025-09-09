@@ -12,13 +12,22 @@ const getAllExpense = async (req, res) => {
 
 const createExpense = async (req, res) => {
   try {
+    // save expense
     const expense = await Expense.create(req.body);
+
     if (!expense) {
-      alert("something wrong");
+      return res.status(400).json({ message: "Something went wrong" });
     }
-    res.status(200).json(expense);
-    console.log("to create data", expense);
+    // Format each expense date
+    const d = new Date(expense.expense_date);
+    const formattedExpense = {
+      ...expense.toObject(),
+      expense_date: d.toLocaleDateString("en-GB"), // dd/mm/yyyy
+    };
+
+    res.status(200).json(formattedExpense);
   } catch (error) {
+    console.error("Create expense error:", error.message);
     res.status(500).json({ message: error.message });
   }
 };

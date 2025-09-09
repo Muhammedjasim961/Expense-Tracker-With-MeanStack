@@ -45,22 +45,23 @@ export class PieChartComponent {
     this.http.get<User[]>('http://localhost:3005').subscribe((result) => {
       const expense_name = result.map((d) => d.expense_name);
       const ExpenseAmount = result.map((d) => d.amount);
-      const expense_date = result.map((d) => d.expense_date);
-      const expense_payment_date = result.map((d) => d.expense_payment_date);
+
       const expense_category = result.map((d) => d.expense_category);
-      const comments = result.map((d) => d.comments);
       const filter = expense_category.filter((d) => {
         d == d;
       });
-      if (expense_category == filter) {
-      }
+      // function filteringSameItems() {
+      //   if (filter == expense_category) {
+      //     alert('same name is found!');
+      //   }
+      // }
       this.chartOptions = {
         series: ExpenseAmount, // pie chart requires number array
         chart: {
           type: 'pie',
           height: 350,
         },
-        labels: expense_category,
+        labels: expense_name,
 
         title: {
           text: 'User Expenses',

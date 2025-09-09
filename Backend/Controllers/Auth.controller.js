@@ -34,7 +34,7 @@ const userLogin = async (req, res) => {
     console.log("Found user:", user);
 
     if (!user) {
-      return res.status(401).json({ message: "In-Correct Email Format" });
+      return res.status(401).json({ message: "Incorrect Email Format!" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -48,7 +48,14 @@ const userLogin = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ message: token });
+    res.json({
+      message: token,
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username, //passing  username and email to display front end profile name and email
+      },
+    });
   } catch (error) {
     console.error("Login Error", error);
     res.status(500).json({ message: "Server error during login" });

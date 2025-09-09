@@ -18,9 +18,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class LoginComponent {
   // users: User = { email: '', password: '' };
   errorMsg = '';
-  username: any = '';
-  @Output() setUserProfileEvent = new EventEmitter<any>();
-
+  // username: any = '';
+  email: any = '';
+  constructor(
+    private UserService: UserService,
+    private router: Router,
+    private _snackBar: MatSnackBar
+  ) {
+    localStorage.getItem('username');
+  }
   loginForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
@@ -36,15 +42,6 @@ export class LoginComponent {
     ]),
   });
 
-  constructor(
-    private UserService: UserService,
-    private router: Router,
-    private _snackBar: MatSnackBar
-  ) {
-    // this.UserService.registerUserData(this.username).subscribe((result) => {
-    //   console.log('from logging checking user name', result);
-    // });
-  }
   //user login checking with email and password
   login() {
     this.UserService.userLogin(
@@ -52,37 +49,48 @@ export class LoginComponent {
       this.loginForm.value.password
     ).subscribe({
       next: (result) => {
-        localStorage.setItem('token', result.message);
-        const setEmailInLocal = localStorage.setItem(
-          'email',
-          this.loginForm.value.email || ''
-        );
-        console.log('setEmailInLocal', setEmailInLocal);
+        console.log('Backend response:', result);
 
+        // Save token
+        localStorage.setItem('token', result.message);
+
+        // Save user details
+        if (result.user) {
+          localStorage.setItem('email', result.user.email);
+          localStorage.setItem('username', result.user.username);
+          console.log(result.user.email);
+        }
+        //this reload for
+        this.UserService.userLogin('', '');
         this.router.navigate(['dashboard']).then(() => {
-          //to reload the page to display sign out button
-          window.location.reload();
+          this.showMessage(); // ✅ snackbar works bottom center
         });
-        this.showMessage();
       },
       error: (err) => {
-        //error message coming from backend
         alert(err.error.message || 'Invalid email or password');
       },
     });
   }
 
   showMessage() {
-    this._snackBar.open('User Logged in successfully!', 'Close', {
-      duration: 3000,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-      panelClass: ['snackbar-success'], // 👈 custom class
-    });
+    const getUsername = localStorage.getItem('username');
+    this._snackBar.open(
+      `User ${getUsername} Logged in successfully!`,
+      'Close',
+      {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['snackbar-success'], // 👈 custom class
+      }
+    );
   }
   onSubmit() {
     if (this.loginForm.valid) {
       console.log('Form submitted:', this.loginForm.value);
     }
+  }
+  clickForm() {
+    this.loginForm.reset();
   }
 }

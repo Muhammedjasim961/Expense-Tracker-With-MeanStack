@@ -48,7 +48,7 @@
         Expense Name must be at least 3 characters.
       </small>
       <small *ngIf="userForm.get('expense_name')?.errors?.['maxlength']">
-        Expense Name should be MAXIMUM 10 characters.
+        Expense Name should be MAXIMUM 15 characters.
       </small>
     </div>
   </div>
@@ -112,9 +112,24 @@
   </div>
   <div class="grid md:grid-cols-2 md:gap-6">
     <div class="relative z-0 w-full mb-5 group">
-      <input
+      <label for="underline_select" class="sr-only">Underline select</label>
+      <select
+        formControlName="expense_payment_type"
+        id="underline_select"
+        class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+      >
+        <option value="Choose a Payment Type" disabled>
+          <b>Choose a Payment Type</b>
+        </option>
+        <option value="Card">Card</option>
+        <option value="Cash">Cash</option>
+        <option value="UPI">UPI</option>
+        <option value="Net Banking">Net Banking</option>
+        <option value="PeyPal">PeyPal</option>
+      </select>
+      <!-- <input
         formControlName="expense_payment_date"
-        type="date"
+        type="text"
         name="floating_expenses_payment_date"
         id="floating_expenses_payment_date"
         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -124,19 +139,19 @@
       <label
         for="floating_expenses_payment_date"
         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-        ><b>Expense Payment Date</b></label
-      >
+        ><b>Expense Payment Type</b></label> -->
+
       <div
         *ngIf="
-          userForm.get('expense_payment_date')?.invalid &&
-          userForm.get('expense_payment_date')?.touched
+          userForm.get('expense_payment_type')?.invalid &&
+          userForm.get('expense_payment_type')?.touched
         "
         class="errorText"
       >
         <small
-          *ngIf="userForm.get('expense_payment_date')?.errors?.['required']"
+          *ngIf="userForm.get('expense_payment_type')?.errors?.['required']"
         >
-          Expense Payment Date is required.
+          Expense Payment Type is required.
         </small>
       </div>
     </div>

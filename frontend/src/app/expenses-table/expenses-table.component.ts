@@ -3,6 +3,7 @@ import { User } from '../user';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-expenses-table',
   standalone: false,
@@ -15,7 +16,7 @@ export class ExpensesTableComponent {
       expense_name: '',
       amount: 0,
       expense_date: '',
-      expense_payment_date: '',
+      expense_payment_type: '',
       expense_category: '',
       comments: '',
     },
@@ -32,19 +33,22 @@ export class ExpensesTableComponent {
       // console.log('Result', result);
     });
   }
+
   deleteExpenses(expense: any, index: any) {
+    confirm('Are you sure you want to delete this..! ');
     const id = expense._id;
     this.expenseService.DeleteExpense(id).subscribe((result) => {
-      confirm('Are you sure you want to delete this..! ');
-      this.expenses.splice(1, index);
-      this.router.navigate(['dashboard']);
-      this.showMessage();
+      this.expenses.splice(index, 1);
       this.expenseService.showExpenses();
+
+      this.showMessage();
+      this.router.navigate(['dashboard']);
+      // this.expenseService.showExpenses();
     });
   }
   showMessage() {
-    this._snackBar.open('Expense Deleted successfully!', 'Close', {
-      duration: 3000,
+    this._snackBar.open(`Expense Deleted successfully!`, '', {
+      duration: 1500,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       panelClass: ['snackbar-deleted'], // 👈 custom class

@@ -22,7 +22,7 @@ export class UserFormComponent {
     expense_name: new FormControl('', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(10),
+      Validators.maxLength(15),
     ]),
     amount: new FormControl('', [
       Validators.required,
@@ -30,7 +30,10 @@ export class UserFormComponent {
       Validators.max(10000000),
     ]),
     expense_date: new FormControl('', Validators.required),
-    expense_payment_date: new FormControl('', Validators.required),
+    expense_payment_type: new FormControl(
+      'Choose a Payment Type',
+      Validators.required
+    ),
     expense_category: new FormControl('', Validators.required),
     comments: new FormControl('', Validators.required),
   });

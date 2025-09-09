@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ChartComponent } from 'ng-apexcharts';
+import { UserService } from '../../user.service';
 import {
   ApexNonAxisChartSeries,
   ApexResponsive,
@@ -32,116 +33,124 @@ export type ChartOptions = {
 })
 export class BarChartComponent {
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-  constructor() {
-    this.chartOptions = {
-      series: [
-        {
-          name: 'Inflation',
-          data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2],
-        },
-      ],
-      chart: {
-        height: 350,
-        type: 'bar',
-      },
-      plotOptions: {
-        bar: {
-          dataLabels: {
-            position: 'top', // top, center, bottom
-          },
-        },
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: function (val: any) {
-          return val + '%';
-        },
-        offsetY: -20,
-        style: {
-          fontSize: '12px',
-          colors: ['#304758'],
-        },
-      },
+  public chartOptions!: Partial<ChartOptions>;
+  data: any = '';
+  constructor(private userService: UserService) {
+    this.loadingPieChartData();
+    this.userService.showExpenses();
+  }
+  // In your component
+  loadingPieChartData() {
+    this.userService.settingDataToPieChart().subscribe((result) => {
+      let monthlyTotals = Array(12).fill(0);
 
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
+      if (Array.isArray(result) && result.length > 0) {
+        result.forEach((expense: any) => {
+          if (expense.expense_date && expense.amount) {
+            const date = new Date(expense.expense_date);
+            if (!isNaN(date.getTime())) {
+              const month = date.getMonth();
+              monthlyTotals[month] += Number(expense.amount) || 0;
+            }
+          }
+        });
+      }
+
+      // ✅ Build new chartOptions fully
+      this.chartOptions = {
+        series: [
+          {
+            name: 'Expenses',
+            data: monthlyTotals,
+          },
         ],
-        position: 'top',
-        labels: {
-          offsetY: -18,
+        chart: {
+          height: 350,
+          type: 'bar',
         },
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        crosshairs: {
-          fill: {
-            type: 'gradient',
-            gradient: {
-              colorFrom: '#D8E3F0',
-              colorTo: '#BED1E6',
-              stops: [0, 100],
-              opacityFrom: 0.4,
-              opacityTo: 0.5,
+        plotOptions: {
+          bar: {
+            dataLabels: {
+              position: 'top',
             },
           },
         },
-        tooltip: {
+        dataLabels: {
           enabled: true,
-          offsetY: -35,
-        },
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          type: 'horizontal',
-          shadeIntensity: 0.25,
-          gradientToColors: undefined,
-          inverseColors: true,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [50, 0, 100, 100],
-        },
-      },
-      yaxis: {
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        labels: {
-          show: false,
           formatter: function (val: any) {
-            return val + '%';
+            return '₹' + val;
+          },
+          offsetY: -20,
+          style: {
+            fontSize: '12px',
+            colors: ['#304758'],
           },
         },
-      },
-      title: {
-        text: 'Monthly Inflation in Argentina, 2002',
-        floating: 0,
-        offsetY: 320,
-        align: 'center',
-        style: {
-          color: '#444',
+        xaxis: {
+          categories: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+          ],
+          position: 'top',
+          labels: {
+            offsetY: -18,
+          },
+          axisBorder: {
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+          tooltip: {
+            enabled: true,
+            offsetY: -35,
+          },
         },
-      },
-    };
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            type: 'horizontal',
+            shadeIntensity: 0.25,
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [50, 0, 100, 100],
+          },
+        },
+        yaxis: {
+          labels: {
+            show: true,
+            formatter: function (val: any) {
+              return '₹' + val;
+            },
+          },
+        },
+        title: {
+          text: 'Monthly Expenses',
+          floating: 0,
+          offsetY: 320,
+          align: 'center',
+          style: {
+            color: '#444',
+          },
+        },
+      };
+    });
+  }
+
+  deleteExpense(id: number) {
+    this.userService.DeleteExpense(id).subscribe(() => {
+      this.loadingPieChartData(); // ✅ refresh after delete
+    });
   }
 }
