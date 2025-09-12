@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { User } from '../../user';
 import { UserService } from '../../user.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import {
   FormBuilder,
   FormControl,
@@ -18,14 +18,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class LoginComponent {
   // users: User = { email: '', password: '' };
   errorMsg = '';
-  // username: any = '';
+  username: any = '';
   email: any = '';
   constructor(
     private UserService: UserService,
     private router: Router,
     private _snackBar: MatSnackBar
   ) {
-    localStorage.getItem('username');
+    this.username = localStorage.getItem('user');
+    // this.email = localStorage.getItem('email');
+    this.UserService.user$.subscribe((user) => {
+      if (user) {
+        this.username = user.username;
+        this.email = user.email;
+      }
+    });
   }
   loginForm = new FormGroup({
     email: new FormControl('', [
@@ -51,17 +58,20 @@ export class LoginComponent {
       next: (result) => {
         console.log('Backend response:', result);
 
-        // Save token
+        // Save token to get logged in
         localStorage.setItem('token', result.message);
 
-        // Save user details
+        // Save user details correctly into the service
         if (result.user) {
-          localStorage.setItem('email', result.user.email);
-          localStorage.setItem('username', result.user.username);
-          console.log(result.user.email);
+          this.UserService.setUser({
+            username: result.user.username, // ✅ fix
+            email: result.user.email, // ✅ fix
+          });
         }
-        //this is for sign out button
-        this.UserService.userLogin('', '');
+
+        // this is for sign out button (if you use it)
+        this.UserService.login();
+
         this.router.navigate(['dashboard']).then(() => {
           this.showMessage();
         });
@@ -73,9 +83,12 @@ export class LoginComponent {
   }
 
   showMessage() {
-    const getUsername = localStorage.getItem('username');
+    const storedUser: any = localStorage.getItem('user');
+
+    const toStringUser = JSON.parse(storedUser); // convert to object
+    const toGetUsername = toStringUser.username;
     this._snackBar.open(
-      `User ${getUsername} Logged in successfully!`,
+      `User ${toGetUsername} Logged in successfully!`,
       'Close',
       {
         duration: 3000,
@@ -90,7 +103,28 @@ export class LoginComponent {
       console.log('Form submitted:', this.loginForm.value);
     }
   }
+  //button to be cleared
   clickForm() {
     this.loginForm.reset();
+  }
+
+  ngOnInit() {
+    this.loadUser();
+
+    // 👇 Subscribe to router events
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.loadUser();
+      }
+    });
+  }
+
+  loadUser() {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const parsed = JSON.parse(user);
+      this.username = parsed.username;
+      this.email = parsed.email;
+    }
   }
 }

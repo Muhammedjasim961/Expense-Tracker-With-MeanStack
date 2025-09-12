@@ -18,6 +18,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 import { ExpensesTableComponent } from './expenses-table/expenses-table.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     UserFormComponent,
     ExpensesTableComponent,
     SpinnerComponent,
+    ExpenseEditComponent,
   ],
   imports: [
     BrowserModule,

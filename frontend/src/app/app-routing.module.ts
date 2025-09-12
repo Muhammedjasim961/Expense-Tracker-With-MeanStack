@@ -5,6 +5,7 @@ import { RegisterComponent } from './Auth/register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { authGuard } from './auth.guard';
+import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,11 @@ const routes: Routes = [
   {
     path: 'user',
     component: UserFormComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'edit/:id',
+    component: ExpenseEditComponent,
     canActivate: [authGuard],
   },
   {

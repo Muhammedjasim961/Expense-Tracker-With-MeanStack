@@ -11,17 +11,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './expenses-table.component.css',
 })
 export class ExpensesTableComponent {
-  expenses: User[] = [
-    {
-      expense_name: '',
-      amount: 0,
-      expense_date: '',
-      expense_payment_type: '',
-      expense_category: '',
-      comments: '',
-    },
-  ];
-
+  expenses: User[] = [];
+  abcd = {
+    name: '',
+  };
   constructor(
     private expenseService: UserService,
     private _snackBar: MatSnackBar,
@@ -53,5 +46,16 @@ export class ExpensesTableComponent {
       verticalPosition: 'bottom',
       panelClass: ['snackbar-deleted'], // 👈 custom class
     });
+  }
+  getEditButtonId(ExpenseId: any) {
+    const expenses = ExpenseId;
+    const _id = expenses._id;
+    this.expenseService.getExpenseById(_id).subscribe((result) => {
+      console.log(result, 'result');
+    });
+    if (!_id) return;
+    this.router.navigate(['/edit', _id]);
+    console.log('id from index', _id);
+    console.log('All expenses from table', expenses);
   }
 }

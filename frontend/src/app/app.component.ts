@@ -9,7 +9,7 @@ import { UserService } from './user.service';
   standalone: false,
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'frontend';
   username: string | null = '';
   email: string | null = '';
@@ -19,11 +19,13 @@ export class AppComponent {
     private router: Router,
     private userService: UserService
   ) {
-    this.checkUser(); // run once when app loads
-    this.email = localStorage.getItem('email');
-    this.username = localStorage.getItem('username');
-    if (this.email) {
-      this.username = localStorage.getItem('username');
+    this.checkUser();
+    // this.email = localStorage.getItem('email');
+    this.username = localStorage.getItem('user');
+    console.log('this.userNAme', this.username);
+
+    if (this.username) {
+      this.username = localStorage.getItem('user');
       return;
     } else {
       alert('user not logged in');
@@ -33,29 +35,39 @@ export class AppComponent {
 
   //  check if user email exists in localStorage
   checkUser() {
-    this.email = localStorage.getItem('email');
-    this.username = localStorage.getItem('username');
-    // console.log('user checking from app.component', this.username);
-    // console.log('email checking from app.component', this.email);
+    const storedUser: any = localStorage.getItem('user');
+    const toStringUser = JSON.parse(storedUser); // convert to object
+    this.username = toStringUser.username;
+    console.log(toStringUser, 'emaail');
+    // const toStringEmail = JSON.parse(storedEmail); // convert to object
+    // this.username = toStringUser.username;
+    // this.email = toStringEmail.email;
     this.userSignOutLogo = !!this.email; // true if email exists
     this.userSignOutLogo = !!this.username; // true if user exists
-    this.userSignOutLogo = true;
   }
-  //  logout
+
+  //  logout code
   signOut() {
-    localStorage.removeItem('email');
-    localStorage.removeItem('username');
+    localStorage.removeItem('user');
     localStorage.removeItem('token');
     this.email = null;
     this.username = null;
     this.userSignOutLogo = false;
-    // if (!this.router.navigate(['/login'])) {
-    //   this.userSignOutLogo = false;
-    // }
-    this.router.navigate(['/register']);
-    this.showMessage();
+    this.userService.clearUser();
+    this.router.navigate(['/login']).then(() => {
+      this.showMessage();
+    });
   }
   showMessage() {
+    const storedUser: any = localStorage.getItem('user');
+    if (storedUser) {
+      const toStringUser = JSON.parse(storedUser); // convert to object
+      this.username = toStringUser.username;
+    } else {
+      this.username || null;
+    }
+    console.log('username', this.username);
+    console.log();
     this._snackBar.open(
       `${this.username || 'User'} Sign Out successfully!`,
       '',
@@ -67,8 +79,18 @@ export class AppComponent {
       }
     );
   }
+
   // update UI whenever login/logout happens
   ngOnInit() {
+    this.userService.user$.subscribe((user) => {
+      if (user) {
+        this.username = user.username;
+        this.email = user.email;
+      } else {
+        this.username = null;
+        this.email = null;
+      }
+    });
     this.userService.isLoggedIn$.subscribe((status) => {
       this.userSignOutLogo = status;
     });

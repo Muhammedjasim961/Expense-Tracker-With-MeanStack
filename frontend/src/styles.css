@@ -7,8 +7,21 @@ body {
   margin: 0;
   padding: 0;
 }
+.backgroundImage {
+  /* background-image: url(https://expense-tracker-money-manager.netlify.app/static/media/img03.abec790698dfcdf49068.png);
+  width: 100%;
+  color: aliceblue;
+  background-repeat: no-repeat; */
+}
 .redstar {
   color: red;
+}
+.userProfileName {
+  color: #f40b5d;
+  letter-spacing: 0.1rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  font-family: "Times New Roman", Times, serif;
 }
 .errorText {
   color: red;
@@ -38,4 +51,61 @@ body {
 /* dashboard active link colors */
 .active-link {
   @apply md:text-sky-500 underline  md:dark:text-blue-200;
+}
+
+/* from userform */
+.backArrowBts {
+  position: sticky;
+  left: 40px;
+  margin-top: 20px;
+  width: fit-content;
+}
+.userForm {
+  margin-top: -40px;
+}
+.redstar {
+  color: red;
+}
+.userNotLoggedIn {
+  /* Red gradient */
+  background: linear-gradient(90deg, #ff4b5c, #f55606);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: fadePulse 3s ease-in-out infinite;
+}
+
+.warning-icon {
+  font-size: 1.4rem;
+  color: #e53935; /* soft red */
+  animation: iconPulse 2.5s infinite ease-in-out;
+}
+
+/* text subtle glowing */
+@keyframes fadePulse {
+  0% {
+    opacity: 0.7;
+    text-shadow: 0 0 4px rgba(229, 57, 53, 0.3);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 12px rgba(245, 34, 65, 0.6);
+  }
+  100% {
+    opacity: 0.7;
+    text-shadow: 0 0 4px rgba(229, 57, 53, 0.3);
+  }
+}
+
+/* icon pulse animation */
+@keyframes iconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
 }

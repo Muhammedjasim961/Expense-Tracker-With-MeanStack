@@ -37,25 +37,24 @@ export class UserFormComponent {
     expense_category: new FormControl('', Validators.required),
     comments: new FormControl('', Validators.required),
   });
-  submitUserDetails() {
+  submitExpenseDetails() {
+    this.loading = true;
     this.userService.submitData(this.userForm.value).subscribe((result) => {
       console.log('submitUserDetails', result);
       // this.loading = true;
 
       // // simulate API call
-      // setTimeout(() => {
-      //   console.log(this.userForm.value);
-      //   this.loading = false; // hide spinner when done
-      // }, 2000);
+      setTimeout(() => {
+        console.log(this.userForm.value);
+        this.loading = false; // hide spinner when done
+      }, 10000);
+      // this.loading = false;
+
       this.router.navigate(['dashboard']);
       this.showMessage();
+      this.loading = false;
     });
   }
-  // openSnackBar(message: string, action: string = 'Close') {
-  //   this._snackBar.open(message, action, {
-  //     duration: 3000, // Optional: duration in milliseconds
-  //   });
-  // }
 
   showMessage() {
     this._snackBar.open('Expense saved successfully!', 'Close', {
