@@ -12,9 +12,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ExpensesTableComponent {
   expenses: User[] = [];
-  abcd = {
-    name: '',
-  };
+  showToast = false;
+  expenseToDelete: any;
+  expenseIndex!: number;
+
   constructor(
     private expenseService: UserService,
     private _snackBar: MatSnackBar,
@@ -28,7 +29,6 @@ export class ExpensesTableComponent {
   }
 
   deleteExpenses(expense: any, index: any) {
-    confirm('Are you sure you want to delete this..! ');
     const id = expense._id;
     this.expenseService.DeleteExpense(id).subscribe((result) => {
       this.expenses.splice(index, 1);
@@ -55,7 +55,22 @@ export class ExpensesTableComponent {
     });
     if (!_id) return;
     this.router.navigate(['/edit', _id]);
-    console.log('id from index', _id);
-    console.log('All expenses from table', expenses);
+  }
+
+  showDeleteToast(expense: any, index: number) {
+    this.expenseToDelete = expense;
+    this.expenseIndex = index;
+    this.showToast = true;
+  }
+
+  confirmDelete() {
+    if (this.expenseToDelete) {
+      this.deleteExpenses(this.expenseToDelete, this.expenseIndex);
+    }
+    this.showToast = false;
+  }
+
+  cancelDelete() {
+    this.showToast = false;
   }
 }

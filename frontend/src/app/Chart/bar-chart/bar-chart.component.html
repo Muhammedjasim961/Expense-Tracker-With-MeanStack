@@ -1,16 +1,14 @@
 <div>
-  <div>
-    <!-- <h1>No data</h1> -->
-  </div>
-
   <apx-chart
+    *ngIf="chartOptions?.series?.length"
     [series]="chartOptions.series"
     [chart]="chartOptions.chart"
-    [dataLabels]="chartOptions.dataLabels"
-    [plotOptions]="chartOptions.plotOptions"
-    [yaxis]="chartOptions.yaxis"
     [xaxis]="chartOptions.xaxis"
+    [plotOptions]="chartOptions.plotOptions"
+    [dataLabels]="chartOptions.dataLabels"
     [fill]="chartOptions.fill"
+    [yaxis]="chartOptions.yaxis"
     [title]="chartOptions.title"
-  ></apx-chart>
+  >
+  </apx-chart>
 </div>

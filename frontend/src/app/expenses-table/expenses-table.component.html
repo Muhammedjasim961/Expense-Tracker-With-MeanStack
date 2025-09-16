@@ -68,9 +68,11 @@
               />
             </svg>
           </button>
+
+          <!-- Delete Button -->
           <button
-            (click)="deleteExpenses(expense, i)"
-            class="font-bold mr-2 text-red-600 dark:text-blue-500 hover:underline"
+            (click)="showDeleteToast(expense, i)"
+            class="font-bold mr-2 text-red-600 dark:text-white hover:underline"
           >
             <svg
               class="w-6 h-6 cursor-pointer text-red-500 dark:text-white"
@@ -88,6 +90,27 @@
               />
             </svg>
           </button>
+
+          <!-- Toast Container -->
+          <div
+            *ngIf="showToast"
+            class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded shadow-lg flex items-center space-x-4 animate-slideDown z-50"
+          >
+            <span>Are you sure you want to delete this expense?</span>
+            <button
+              (click)="confirmDelete()"
+              class="bg-white text-red-600 px-3 py-1 rounded font-medium hover:bg-gray-200"
+            >
+              Yes
+            </button>
+            <button
+              (click)="cancelDelete()"
+              class="bg-white text-gray-800 px-3 py-1 rounded font-medium hover:bg-gray-200"
+            >
+              No
+            </button>
+          </div>
+
           <button
             [disabled]
             class="font-bold cursor-pointer text-red-600 dark:text-blue-500 hover:underline"

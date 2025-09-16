@@ -19,6 +19,7 @@ import { ExpensesTableComponent } from './expenses-table/expenses-table.componen
 import { SpinnerComponent } from './spinner/spinner.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
     ExpensesTableComponent,
     SpinnerComponent,
     ExpenseEditComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { authGuard } from './auth.guard';
 import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,11 @@ const routes: Routes = [
   {
     path: 'edit/:id',
     component: ExpenseEditComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [authGuard],
   },
   {

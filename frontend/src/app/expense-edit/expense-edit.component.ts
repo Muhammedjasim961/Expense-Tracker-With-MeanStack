@@ -70,9 +70,7 @@ export class ExpenseEditComponent implements OnInit {
   // Called when user clicks "Update" to submit changes
   submitUpdatedExpense() {
     if (this.userForm.invalid) return;
-
     this.loading = true; // Start loader ✅
-
     const expenseId = this.route.snapshot.paramMap.get('id');
     const updatedData = { ...this.userForm.value };
     // ✅ remove _id so MongoDB won’t throw error

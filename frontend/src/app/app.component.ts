@@ -19,29 +19,30 @@ export class AppComponent implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
-    this.checkUser();
-    // this.email = localStorage.getItem('email');
-    this.username = localStorage.getItem('user');
-    console.log('this.userNAme', this.username);
+    const storedUser: any = localStorage.getItem('user');
+    // console.log('storedUser', storedUser);
+    // const StringUser = JSON.parse(storedUser); // convert to object
+    // console.log('StringUser', StringUser.username);
+    // this.username = StringUser.username || 'getting User Delay';
 
-    if (this.username) {
-      this.username = localStorage.getItem('user');
-      return;
-    } else {
-      alert('user not logged in');
-    }
-    console.log('userSignOutLogo', this.userSignOutLogo, this.username);
+    // if (storedUser) {
+    //   this.checkUser();
+    // }
   }
 
   //  check if user email exists in localStorage
   checkUser() {
     const storedUser: any = localStorage.getItem('user');
-    const toStringUser = JSON.parse(storedUser); // convert to object
-    this.username = toStringUser.username;
-    console.log(toStringUser, 'emaail');
-    // const toStringEmail = JSON.parse(storedEmail); // convert to object
-    // this.username = toStringUser.username;
-    // this.email = toStringEmail.email;
+    console.log('storedUser', storedUser);
+    const StringUser = JSON.parse(storedUser); // convert to object
+    console.log('StringUser', StringUser.username);
+    this.username = StringUser.username || 'getting User Delay';
+    if (this.username) {
+      this.username;
+      return;
+    } else {
+      alert('User not logged in');
+    }
     this.userSignOutLogo = !!this.email; // true if email exists
     this.userSignOutLogo = !!this.username; // true if user exists
   }

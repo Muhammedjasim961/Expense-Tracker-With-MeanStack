@@ -9,6 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../auth.service';
+
 @Component({
   selector: 'app-login',
   standalone: false,
@@ -20,10 +22,12 @@ export class LoginComponent {
   errorMsg = '';
   username: any = '';
   email: any = '';
+  private logoutTimer: any;
   constructor(
     private UserService: UserService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private authService: AuthService
   ) {
     this.username = localStorage.getItem('user');
     // this.email = localStorage.getItem('email');
@@ -57,9 +61,11 @@ export class LoginComponent {
     ).subscribe({
       next: (result) => {
         console.log('Backend response:', result);
+        localStorage.setItem('user', JSON.stringify(result.user));
 
         // Save token to get logged in
         localStorage.setItem('token', result.message);
+        this.authService.login(result.message); // result.message is your token
 
         // Save user details correctly into the service
         if (result.user) {
@@ -88,10 +94,10 @@ export class LoginComponent {
     const toStringUser = JSON.parse(storedUser); // convert to object
     const toGetUsername = toStringUser.username;
     this._snackBar.open(
-      `User ${toGetUsername} Logged in successfully!`,
+      ` ${toGetUsername || 'User'} Logged in successfully!`,
       'Close',
       {
-        duration: 3000,
+        duration: 1500,
         horizontalPosition: 'center',
         verticalPosition: 'bottom',
         panelClass: ['snackbar-success'], // 👈 custom class
@@ -110,6 +116,7 @@ export class LoginComponent {
 
   ngOnInit() {
     this.loadUser();
+    //this.authService.autoLogout();
 
     // 👇 Subscribe to router events
     this.router.events.subscribe((event) => {

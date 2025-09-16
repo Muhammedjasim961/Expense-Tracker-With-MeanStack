@@ -34,57 +34,70 @@ export type ChartOptions = {
 export class BarChartComponent {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions!: Partial<ChartOptions>;
-  data: any = '';
+
   constructor(private userService: UserService) {
-    this.loadingPieChartData();
-    this.userService.showExpenses();
+    // Initialize chartOptions to prevent undefined errors
+    this.chartOptions = {
+      series: [],
+      chart: { height: 350, type: 'bar' },
+      xaxis: { categories: [] },
+      plotOptions: {},
+      dataLabels: {},
+      fill: {},
+      yaxis: {},
+      title: {},
+    };
   }
-  // In your component
-  loadingPieChartData() {
-    this.userService.settingDataToPieChart().subscribe((result) => {
-      let monthlyTotals = Array(12).fill(0);
+
+  ngOnInit(): void {
+    // Fetch individual expenses
+    this.userService.showExpenses().subscribe((res: any[]) => {
+      this.updateExpenseChart(res);
+    });
+
+    // Fetch monthly totals for pie/bar chart
+    this.loadingMonthlyChartData();
+  }
+
+  // Update chart for individual expenses
+  updateExpenseChart(expenses: any[]): void {
+    if (expenses && expenses.length > 0) {
+      this.chartOptions.series = [
+        { name: 'Amount', data: expenses.map((e) => e.amount) },
+      ];
+      this.chartOptions.xaxis.categories = expenses.map((e) => e.expense_name);
+    } else {
+      this.chartOptions.series = [{ name: 'Amount', data: [] }];
+      this.chartOptions.xaxis.categories = [];
+    }
+  }
+
+  // Update chart for monthly totals
+  loadingMonthlyChartData(): void {
+    this.userService.settingDataToPieChart().subscribe((result: any[]) => {
+      const monthlyTotals = Array(12).fill(0);
 
       if (Array.isArray(result) && result.length > 0) {
-        result.forEach((expense: any) => {
+        result.forEach((expense) => {
           if (expense.expense_date && expense.amount) {
             const date = new Date(expense.expense_date);
             if (!isNaN(date.getTime())) {
-              const month = date.getMonth();
-              monthlyTotals[month] += Number(expense.amount) || 0;
+              monthlyTotals[date.getMonth()] += Number(expense.amount) || 0;
             }
           }
         });
       }
 
-      // ✅ Build new chartOptions fully
+      // Set chartOptions for monthly totals
       this.chartOptions = {
-        series: [
-          {
-            name: 'Expenses',
-            data: monthlyTotals,
-          },
-        ],
-        chart: {
-          height: 350,
-          type: 'bar',
-        },
-        plotOptions: {
-          bar: {
-            dataLabels: {
-              position: 'top',
-            },
-          },
-        },
+        series: [{ name: 'Expenses', data: monthlyTotals }],
+        chart: { height: 350, type: 'bar' },
+        plotOptions: { bar: { dataLabels: { position: 'top' } } },
         dataLabels: {
           enabled: true,
-          formatter: function (val: any) {
-            return '₹' + val;
-          },
+          formatter: (val: any) => '₹' + val,
           offsetY: -20,
-          style: {
-            fontSize: '12px',
-            colors: ['#304758'],
-          },
+          style: { fontSize: '12px', colors: ['#304758'] },
         },
         xaxis: {
           categories: [
@@ -102,19 +115,10 @@ export class BarChartComponent {
             'Dec',
           ],
           position: 'top',
-          labels: {
-            offsetY: -18,
-          },
-          axisBorder: {
-            show: false,
-          },
-          axisTicks: {
-            show: false,
-          },
-          tooltip: {
-            enabled: true,
-            offsetY: -35,
-          },
+          labels: { offsetY: -18 },
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+          tooltip: { enabled: true, offsetY: -35 },
         },
         fill: {
           type: 'gradient',
@@ -128,29 +132,19 @@ export class BarChartComponent {
           },
         },
         yaxis: {
-          labels: {
-            show: true,
-            formatter: function (val: any) {
-              return '₹' + val;
-            },
-          },
+          labels: { show: true, formatter: (val: any) => '₹' + val },
         },
         title: {
           text: 'Monthly Expenses',
-          floating: 0,
-          offsetY: 320,
+          floating: false,
           align: 'center',
-          style: {
-            color: '#444',
-          },
+          style: { color: '#444' },
         },
       };
     });
   }
 
   deleteExpense(id: number) {
-    this.userService.DeleteExpense(id).subscribe(() => {
-      this.loadingPieChartData(); // ✅ refresh after delete
-    });
+    this.userService.DeleteExpense(id).subscribe(() => {});
   }
 }
