@@ -19,6 +19,13 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use("/", ExpenseRoute);
 app.use("/", AuthenticateUser);
+app.use(
+  cors({
+    origin: "http://localhost:4200",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 mongoose
   .connect(
     "mongodb+srv://jasimwayanad961:ou3mKGK2tVPnTUYh@cluster0.3qqc6xd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -117,7 +124,33 @@ app.put("/profile", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Error updating profile", error });
   }
 });
+// GET /expenses?page=1&limit=5
+app.get("/expenses", async (req, res) => {
+  try {
+    //setting query params to pick up page and limit
 
+    const page = parseInt(req.query.page) || 1; //default page number is 1
+    const limit = parseInt(req.query.limit) || 5; // default 10 pages limit
+
+    // Calculate how many records to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch expenses with skip and limit
+    const expenses = await Expense.find().skip(skip).limit(limit);
+
+    // Count total expenses
+    const total = await Expense.countDocuments();
+    res.json({
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      totalRecords: total,
+      expenses,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching expenses", error: err });
+  }
+});
 //get expense by id
 
 // app.post("/insertExpense", async (req, res) => {

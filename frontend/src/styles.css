@@ -6,6 +6,8 @@
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .backgroundImage {
   /* background-image: url(https://expense-tracker-money-manager.netlify.app/static/media/img03.abec790698dfcdf49068.png);
@@ -122,4 +124,15 @@ body {
 
 .animate-slideDown {
   animation: slideDown 0.3s ease-out forwards;
+}
+.bg-gray-900\/50 {
+  background-color: transparent !important;
+}
+.fixed.inset-0.bg-gray-900\/50 {
+  background-color: transparent !important;
+  pointer-events: none !important; /* let clicks go through */
+}
+.selected {
+  background-color: #008ffb;
+  color: aliceblue;
 }

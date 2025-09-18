@@ -91,8 +91,11 @@ export class BarChartComponent {
       // Set chartOptions for monthly totals
       this.chartOptions = {
         series: [{ name: 'Expenses', data: monthlyTotals }],
+
         chart: { height: 350, type: 'bar' },
-        plotOptions: { bar: { dataLabels: { position: 'top' } } },
+        plotOptions: {
+          bar: { dataLabels: { position: 'top' } },
+        },
         dataLabels: {
           enabled: true,
           formatter: (val: any) => '₹' + val,
@@ -114,8 +117,8 @@ export class BarChartComponent {
             'Nov',
             'Dec',
           ],
-          position: 'top',
-          labels: { offsetY: -18 },
+          position: 'bottom',
+          labels: { offsetY: -28 },
           axisBorder: { show: false },
           axisTicks: { show: false },
           tooltip: { enabled: true, offsetY: -35 },
@@ -136,8 +139,8 @@ export class BarChartComponent {
         },
         title: {
           text: 'Monthly Expenses',
-          floating: false,
-          align: 'center',
+          floating: true,
+          align: 'left',
           style: { color: '#444' },
         },
       };
@@ -145,6 +148,8 @@ export class BarChartComponent {
   }
 
   deleteExpense(id: number) {
-    this.userService.DeleteExpense(id).subscribe(() => {});
+    this.userService.DeleteExpense(id).subscribe(() => {
+      window.location.reload;
+    });
   }
 }

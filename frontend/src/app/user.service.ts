@@ -14,6 +14,8 @@ export class UserService {
   DeleteOneExpense = 'http://localhost:3005/deleteExpense/';
   EditExpense = 'http://localhost:3005/updateExpense';
   expensesById = 'http://localhost:3005/expense/';
+  pagination = 'http://localhost:3000/expenses'; // backend URL
+
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   //with a BehaviorSubject (reactive variable) that tells the whole app whether the user is logged in or not.
   // private userSubject = new BehaviorSubject<any>(this.getUserFromStorage());
@@ -104,10 +106,9 @@ export class UserService {
     return this.http.get<User>(`http://localhost:3005/expense/${id}`);
     // or whatever your "get single expense" route is
   }
-  updatedUserProfile(data: any) {
-    const token = localStorage.getItem('token'); // get token from storage
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.put(`http://localhost:3005/profile`, data, { headers });
-    // or whatever your "get single expense" route is
+  setPagination(page: number, limit: number): Observable<any> {
+    return this.http.get(
+      `http://localhost:3005/expenses?page=${page}&limit=${limit}`
+    );
   }
 }

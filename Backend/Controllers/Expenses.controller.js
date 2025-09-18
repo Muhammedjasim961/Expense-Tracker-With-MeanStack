@@ -39,7 +39,7 @@ const getExpenseById = async (req, res) => {
     if (!expense) {
       res.status(401).json({ message: "Cannot find any expenses" });
     }
-    res.status(200).json({ message: expense });
+    res.status(200).json(expense);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -53,7 +53,7 @@ const updateExpense = async (req, res) => {
     if (!expense) {
       res.status(401).json({ message: "error in updating this expense" });
     }
-    res.status(201).json({ message: expense });
+    res.status(201).json(expense);
   } catch (error) {
     res.status(500).json({ message: error });
     console.log("error in update expense", error);

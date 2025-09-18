@@ -37,27 +37,28 @@ export class RegisterComponent {
   registerUserFormDetails() {
     this.userService
       .checkingUserExits(this.registerForm.value.username)
-      .subscribe((result) => {
-        if (result.length) {
-          alert(
-            `user ${this.registerForm.value.username} already exits AND Check Out Your Email Also!`
-          );
-          // console.log( `user ${this.registerForm.value.username} exits checking`,result);
-        }
-        this.userService
-          .registerUserData(this.registerForm.value)
-          .subscribe((result) => {
-            this.router.navigate(['login']);
-            if (this.registerForm.valid) {
-              const email: any = this.registerForm.value.email;
-              localStorage.setItem('email', email);
-            }
-            const username: any = this.registerForm.value.username;
-            localStorage.setItem('username', username);
+      .subscribe({
+        next: (result) => {
+          if (result && result.username === this.registerForm.value.username) {
+            alert('User already exists!');
+            return;
+          }
 
-            this.showMessage();
-            console.log('register', result);
+          this.userService.registerUserData(this.registerForm.value).subscribe({
+            next: (res) => {
+              this.router.navigate(['/login']); // ✅ use this.router
+              this.showMessage();
+              console.log('Register success:', res);
+            },
+            error: (err) => {
+              alert(err.error.message || 'Registration failed');
+            },
           });
+        },
+        error: (err) => {
+          console.error('Error checking user:', err);
+          alert('Something went wrong while checking user');
+        },
       });
   }
   showMessage() {

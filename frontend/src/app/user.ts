@@ -1,5 +1,6 @@
 export interface User {
-  id?: number;
+  _id: string; // add this
+  id?: number; // optional if you have local id
   username?: string;
   email?: string;
   password?: string;

@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../auth.service';
+//import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -26,8 +26,7 @@ export class LoginComponent {
   constructor(
     private UserService: UserService,
     private router: Router,
-    private _snackBar: MatSnackBar,
-    private authService: AuthService
+    private _snackBar: MatSnackBar //private authService: AuthService
   ) {
     this.username = localStorage.getItem('user');
     // this.email = localStorage.getItem('email');
@@ -62,20 +61,22 @@ export class LoginComponent {
       next: (result) => {
         console.log('Backend response:', result);
         localStorage.setItem('user', JSON.stringify(result.user));
+        //console.log('user', result.user);
 
         // Save token to get logged in
         localStorage.setItem('token', result.message);
-        this.authService.login(result.message); // result.message is your token
+        //console.log('token', result.message);
+        //this.authService.login(result.message); //  token
 
         // Save user details correctly into the service
         if (result.user) {
           this.UserService.setUser({
-            username: result.user.username, // ✅ fix
-            email: result.user.email, // ✅ fix
+            username: result.user.username,
+            email: result.user.email,
           });
         }
 
-        // this is for sign out button (if you use it)
+        // this is for sign out button
         this.UserService.login();
 
         this.router.navigate(['dashboard']).then(() => {
@@ -83,6 +84,7 @@ export class LoginComponent {
         });
       },
       error: (err) => {
+        console.log(err);
         alert(err.error.message || 'Invalid email or password');
       },
     });
