@@ -1,65 +1,52 @@
-# Expense-Tracker-With-MeanStack
+# 💰 Expense Tracker With MEAN Stack
 
-# Users can track their Expense through their career
+[![Angular](https://img.shields.io/badge/Angular-19.2.12-red?logo=angular)](https://angular.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-18.16.0-green?logo=node.js)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0.7-brightgreen?logo=mongodb)](https://www.mongodb.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
-# Frontend
+> Track your expenses effortlessly with a full-stack MEAN stack application. Stay on top of your spending and manage your finances efficiently.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.12.
+---
 
-## Development server
+## 🚀 Project Overview
 
-To start a local development server, run:
+This is a **full-stack Expense Tracker application** built using the **MEAN stack**:
 
-```bash
-ng serve
-```
+- **MongoDB** – Database for storing users and expense data
+- **Express.js** – Backend REST API for CRUD operations
+- **Angular 19** – Frontend for dynamic, responsive UI
+- **Node.js** – Server runtime
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+**Key Features:**
 
-## Code scaffolding
+- ✅ User registration and secure login
+- ✅ Add, edit, delete, and view expenses
+- ✅ Search/filter expenses by name, category, or payment type
+- ✅ Pagination for large datasets
+- ✅ Real-time total expense calculation
+- ✅ Responsive design for desktop & mobile
+- ✅ Notification messages for actions (add, edit, delete)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 📹 Demo
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+![Expense Tracker Demo](https://user-images.githubusercontent.com/yourusername/demo.gif)
 
-```bash
-ng generate --help
-```
+> Demo shows adding, deleting, searching, filtering, and pagination in action.
 
-## Building
+---
 
-To build the project run:
+## 🧩 Frontend Setup (Angular 19)
 
-```bash
-ng build
-```
+**Prerequisites:**
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- Node.js >= 18
+- Angular CLI >= 19.2
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+**Install dependencies:**
 
 ```bash
-ng e2e
+npm install
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-> > > > > > > be81ead (Initial commit for frontend)
