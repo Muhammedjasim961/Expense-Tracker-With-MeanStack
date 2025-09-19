@@ -64,7 +64,7 @@ export class ExpensesTableComponent implements OnInit, OnChanges {
 
     if (!searchTerm) {
       // If input is cleared, restore all expenses
-      // this.expenses = [...this.expenseBackup];
+      this.expenses = [...this.expenseBackup];
       this.loadExpenses();
       this.calculateTotalExpenses();
     } else {
@@ -186,6 +186,7 @@ export class ExpensesTableComponent implements OnInit, OnChanges {
       }
       this.router.navigate(['/dashboard']);
       this.showMessage();
+      this.loadExpenses(); // reload previous page from server
     });
   }
 

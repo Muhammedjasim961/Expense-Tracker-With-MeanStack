@@ -41,6 +41,15 @@ body {
   font-family: "Times New Roman", Times, serif;
   font-weight: 500;
   letter-spacing: 1px;
+  border-radius: 2px !important;
+  width: fixed;
+}
+.snackbar-login {
+  background-color: rgb(52, 254, 109) !important; /* Tailwind green-500 */
+  color: #5555 !important;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 .snackbar-logOut {
   background-color: rgb(254, 153, 52) !important; /* Tailwind green-500 */

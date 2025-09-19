@@ -123,7 +123,7 @@
         <td>
           <button
             (click)="getEditButtonId(expense)"
-            class="font-medium mr-2 text-blue-600 dark:text-blue-500 hover:underline"
+            class="font-medium ml-6 text-blue-600 dark:text-blue-500 hover:underline"
           >
             <svg
               class="w-6 h-6 text-amber-600 cursor-pointer dark:text-white"
@@ -150,7 +150,7 @@
           <!-- Delete Button -->
           <button
             (click)="showDeleteToast(expense, i)"
-            class="font-bold mr-2 text-red-600 dark:text-white hover:underline"
+            class="font-bold ml-2 text-red-600 dark:text-white hover:underline"
           >
             <svg
               class="w-6 h-6 cursor-pointer text-red-500 dark:text-white"
@@ -172,7 +172,7 @@
           <!-- Toast Container -->
           <div
             *ngIf="showToast"
-            class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded shadow-lg flex items-center space-x-4 animate-slideDown z-50"
+            class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg flex items-center space-x-4 animate-slideDown z-50"
           >
             <span>Are you sure you want to delete this expense?</span>
             <button
@@ -189,8 +189,8 @@
             </button>
           </div>
 
-          <button
-            [disabled]
+          <!-- <button
+            [disabled]="!expense"
             class="font-bold cursor-pointer text-red-600 dark:text-blue-500 hover:underline"
           >
             <svg
@@ -208,7 +208,7 @@
                 clip-rule="evenodd"
               />
             </svg>
-          </button>
+          </button> -->
         </td>
       </tr>
     </tbody>
@@ -237,8 +237,9 @@
       <li>
         <button
           (click)="nextPage()"
-          [disabled]="page === totalPages"
-          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-600 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disable: cursor-not-allowed enabled:cursor-pointer disabled:opacity-50 disabled:bg-gray-400"
+          [disabled]="page === totalPages || page <= 1"
+          [disabled]=""
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-600 bg-white border border-gray-300 rounded-e-lg hover:bg-amber-400 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disable: cursor-not-allowed enabled:cursor-pointer disabled:opacity-50 disabled:bg-gray-400"
         >
           Next
         </button>
