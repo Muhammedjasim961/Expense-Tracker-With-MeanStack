@@ -1,14 +1,45 @@
-<div>
-  <apx-chart
-    *ngIf="chartOptions?.series?.length"
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [xaxis]="chartOptions.xaxis"
-    [plotOptions]="chartOptions.plotOptions"
-    [dataLabels]="chartOptions.dataLabels"
-    [fill]="chartOptions.fill"
-    [yaxis]="chartOptions.yaxis"
-    [title]="chartOptions.title"
-  >
-  </apx-chart>
+<div class="charts-container">
+  <!-- Monthly Expenses Chart -->
+  <div class="chart-card">
+    <h3>Monthly Expenses Overview</h3>
+    <google-chart
+      [title]="monthlyTitle"
+      [type]="monthlyType"
+      [data]="monthlyData"
+      [columns]="monthlyColumns"
+      [options]="monthlyOptions"
+      [width]="monthlyWidth"
+      [height]="monthlyHeight"
+      (select)="onMonthlyChartSelect($event)"
+    >
+    </google-chart>
+
+    <!-- Summary Statistics -->
+    <div class="chart-stats">
+      <div class="stat-item">
+        <span class="stat-label">Total Annual Expenses:</span>
+        <span class="stat-value">₹{{ getTotalAnnualExpenses() | number }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Highest Spending Month:</span>
+        <span class="stat-value">{{ getHighestExpenseMonth() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Individual Expenses Chart -->
+  <div class="chart-card">
+    <h3>Individual Expenses</h3>
+    <google-chart
+      [title]="individualTitle"
+      [type]="individualType"
+      [data]="individualData"
+      [columns]="individualColumns"
+      [options]="individualOptions"
+      [width]="individualWidth"
+      [height]="individualHeight"
+      (select)="onIndividualChartSelect($event)"
+    >
+    </google-chart>
+  </div>
 </div>

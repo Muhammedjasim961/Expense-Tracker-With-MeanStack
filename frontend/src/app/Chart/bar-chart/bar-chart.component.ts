@@ -1,155 +1,145 @@
-import { Component, ViewChild } from '@angular/core';
-import { ChartComponent } from 'ng-apexcharts';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../user.service';
-import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart,
-  ApexDataLabels,
-  ApexPlotOptions,
-  ApexYAxis,
-  ApexTitleSubtitle,
-  ApexXAxis,
-  ApexFill,
-} from 'ng-apexcharts';
 
-export type ChartOptions = {
-  series: ApexNonAxisChartSeries | any;
-  chart: ApexChart | any;
-  responsive: ApexResponsive[] | any;
-  labels: any | any;
-  dataLabels: ApexDataLabels | any;
-  plotOptions: ApexPlotOptions | any;
-  yaxis: ApexYAxis | any;
-  xaxis: ApexXAxis | any;
-  fill: ApexFill | any;
-  title: ApexTitleSubtitle | any;
-};
 @Component({
   selector: 'app-bar-chart',
   standalone: false,
   templateUrl: './bar-chart.component.html',
-  styleUrl: './bar-chart.component.css',
+  styleUrls: ['./bar-chart.component.css'],
 })
-export class BarChartComponent {
-  @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions!: Partial<ChartOptions>;
+export class BarChartComponent implements OnInit {
+  type: any = '';
+  // Individual Expenses Chart
+  individualTitle = 'Individual Expenses';
+  individualType: any = 'ColumnChart';
+  individualData: any[] = [];
+  individualColumns = ['Expense', 'Amount'];
+  individualOptions = {
+    legend: { position: 'none' },
+    backgroundColor: 'transparent',
+    chartArea: { width: '80%', height: '70%' },
+    hAxis: { title: 'Expenses' },
+    vAxis: { title: 'Amount (₹)', format: '₹#,##0' },
+  };
+  individualWidth = 600;
+  individualHeight = 400;
 
-  constructor(private userService: UserService) {
-    // Initialize chartOptions to prevent undefined errors
-    this.chartOptions = {
-      series: [],
-      chart: { height: 350, type: 'bar' },
-      xaxis: { categories: [] },
-      plotOptions: {},
-      dataLabels: {},
-      fill: {},
-      yaxis: {},
-      title: {},
-    };
-  }
+  // Monthly Expenses Chart
+  monthlyTitle = 'Monthly Expenses';
+  monthlyType: any = 'ColumnChart';
+  monthlyData: any[] = [];
+  monthlyColumns = ['Month', 'Total Amount'];
+  monthlyOptions = {
+    legend: { position: 'none' },
+    backgroundColor: 'transparent',
+    chartArea: { width: '80%', height: '70%' },
+    hAxis: { title: 'Months' },
+    vAxis: { title: 'Total Amount (₹)', format: '₹#,##0' },
+    animation: {
+      startup: true,
+      duration: 1000,
+      easing: 'out',
+    },
+  };
+  monthlyWidth = 800;
+  monthlyHeight = 400;
+
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    // Fetch individual expenses
+    this.loadIndividualExpenses();
+    this.loadMonthlyExpenses();
+  }
+
+  // Load individual expenses
+  loadIndividualExpenses(): void {
     this.userService.showExpenses().subscribe((res: any[]) => {
-      this.updateExpenseChart(res);
+      this.individualData = res.map((expense) => [
+        expense.expense_name,
+        Number(expense.amount),
+      ]);
     });
-
-    // Fetch monthly totals for pie/bar chart
-    this.loadingMonthlyChartData();
   }
 
-  // Update chart for individual expenses
-  updateExpenseChart(expenses: any[]): void {
-    if (expenses && expenses.length > 0) {
-      this.chartOptions.series = [
-        { name: 'Amount', data: expenses.map((e) => e.amount) },
-      ];
-      this.chartOptions.xaxis.categories = expenses.map((e) => e.expense_name);
-    } else {
-      this.chartOptions.series = [{ name: 'Amount', data: [] }];
-      this.chartOptions.xaxis.categories = [];
-    }
-  }
-
-  // Update chart for monthly totals
-  loadingMonthlyChartData(): void {
+  // Load and calculate monthly expenses
+  loadMonthlyExpenses(): void {
     this.userService.settingDataToPieChart().subscribe((result: any[]) => {
       const monthlyTotals = Array(12).fill(0);
+      const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
 
       if (Array.isArray(result) && result.length > 0) {
         result.forEach((expense) => {
           if (expense.expense_date && expense.amount) {
             const date = new Date(expense.expense_date);
             if (!isNaN(date.getTime())) {
-              monthlyTotals[date.getMonth()] += Number(expense.amount) || 0;
+              const month = date.getMonth();
+              monthlyTotals[month] += Number(expense.amount) || 0;
             }
           }
         });
       }
 
-      // Set chartOptions for monthly totals
-      this.chartOptions = {
-        series: [{ name: 'Expenses', data: monthlyTotals }],
-
-        chart: { height: 350, type: 'bar' },
-        plotOptions: {
-          bar: { dataLabels: { position: 'top' } },
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: (val: any) => '₹' + val,
-          offsetY: -20,
-          style: { fontSize: '12px', colors: ['#304758'] },
-        },
-        xaxis: {
-          categories: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-          ],
-          position: 'bottom',
-          labels: { offsetY: -28 },
-          axisBorder: { show: false },
-          axisTicks: { show: false },
-          tooltip: { enabled: true, offsetY: -35 },
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shade: 'light',
-            type: 'horizontal',
-            shadeIntensity: 0.25,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [50, 0, 100, 100],
-          },
-        },
-        yaxis: {
-          labels: { show: true, formatter: (val: any) => '₹' + val },
-        },
-        title: {
-          text: 'Monthly Expenses',
-          floating: true,
-          align: 'left',
-          style: { color: '#444' },
-        },
-      };
+      // Prepare data for Google Charts
+      this.monthlyData = monthNames.map((monthName, index) => [
+        monthName,
+        monthlyTotals[index],
+      ]);
     });
   }
 
-  deleteExpense(id: number) {
+  // Chart events for interactivity
+  onIndividualChartSelect(event: any): void {
+    console.log('Individual chart selected:', event);
+  }
+
+  onMonthlyChartSelect(event: any): void {
+    console.log('Monthly chart selected:', event);
+    // You can add more interactive features here
+  }
+
+  deleteExpense(id: number): void {
     this.userService.DeleteExpense(id).subscribe(() => {
-      window.location.reload;
+      // Refresh both charts after deletion
+      this.loadIndividualExpenses();
+      this.loadMonthlyExpenses();
     });
+  }
+
+  // Get total annual expenses
+  getTotalAnnualExpenses(): number {
+    return this.monthlyData.reduce(
+      (total, monthData) => total + (monthData[1] || 0),
+      0
+    );
+  }
+
+  // Get month with highest expenses
+  getHighestExpenseMonth(): string {
+    if (this.monthlyData.length === 0) return 'No data';
+
+    let maxIndex = 0;
+    let maxValue = 0;
+
+    this.monthlyData.forEach((monthData, index) => {
+      if (monthData[1] > maxValue) {
+        maxValue = monthData[1];
+        maxIndex = index;
+      }
+    });
+
+    return this.monthlyData[maxIndex][0];
   }
 }

@@ -1,9 +1,12 @@
-<div id="chart" class="text-2xl text-amber-800" *ngIf="chartOptions">
-  <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [labels]="chartOptions.labels"
-    [responsive]="chartOptions.responsive"
-    [title]="chartOptions.title"
-  ></apx-chart>
+<div class="chart-container">
+  <google-chart
+    [title]="title"
+    [type]="type"
+    [data]="data"
+    [columns]="columnNames"
+    [options]="options"
+    [width]="width"
+    [height]="height"
+  >
+  </google-chart>
 </div>
