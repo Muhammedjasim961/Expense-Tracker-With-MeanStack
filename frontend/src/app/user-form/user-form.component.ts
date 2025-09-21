@@ -22,7 +22,7 @@ export class UserFormComponent {
     expense_name: new FormControl('', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(15),
+      Validators.maxLength(20),
     ]),
     amount: new FormControl('', [
       Validators.required,

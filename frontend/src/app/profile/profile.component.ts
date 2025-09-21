@@ -16,6 +16,7 @@ import { AuthService } from '../auth.service';
 export class ProfileComponent implements AfterViewInit {
   username: any = '';
   email = '';
+  profileForm!: FormGroup;
   constructor(
     private router: Router,
     private _snackBar: MatSnackBar,
@@ -28,19 +29,23 @@ export class ProfileComponent implements AfterViewInit {
     const toStringUser = JSON.parse(storedUser); // convert to object
     this.username = toStringUser.username;
   }
-  profileForm = new FormGroup({
-    username: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(15),
-      // Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
-    ]),
-    email: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}'),
-    ]),
-  });
+  ngOnInit() {
+    this.profileForm = new FormGroup({
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(15),
+        // Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(
+          '[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}'
+        ),
+      ]),
+    });
+  }
 
   ngAfterViewInit() {
     // Grab the modal element
@@ -72,20 +77,19 @@ export class ProfileComponent implements AfterViewInit {
     this.authService.updatedUserProfile(this.profileForm.value).subscribe({
       next: (result: User) => {
         console.log('Backend response:', result);
-
+        const expense = result;
+        //  update form instantly
+        this.profileForm.patchValue({
+          username: expense.username,
+          email: expense.email,
+        });
         // ✅ update shared state
         this.authService.setUser(result);
 
-        //  update form instantly
-        this.profileForm.patchValue({
-          username: result.username,
-          email: result.email,
-        });
         //this is coming from auth service to show profile when its updated
         this.userService.setUser(result);
 
         this.username = result.username; // if locally used
-
         this.showMessage();
         this.router.navigate(['/dashboard']);
       },

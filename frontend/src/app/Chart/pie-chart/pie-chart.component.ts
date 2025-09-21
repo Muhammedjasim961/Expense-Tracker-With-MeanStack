@@ -14,6 +14,7 @@ import {
 } from 'ng-apexcharts';
 import { User } from '../../user';
 import { map } from 'rxjs';
+import { UserService } from '../../user.service';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries | any;
@@ -36,13 +37,13 @@ export type ChartOptions = {
 export class PieChartComponent {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ChartOptions> = {};
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
   ngOnInit() {
     this.loadUserData();
   }
 
   loadUserData() {
-    this.http.get<User[]>('http://localhost:3005').subscribe((result) => {
+    this.userService.settingDataToPieChart().subscribe((result) => {
       const expense_name = result.map((d) => d.expense_name);
       const ExpenseAmount = result.map((d) => d.amount);
 

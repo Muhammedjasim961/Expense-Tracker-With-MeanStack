@@ -8,7 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './Auth/login/login.component';
 import { RegisterComponent } from './Auth/register/register.component';
 import { CommonModule } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import ApexCharts from 'apexcharts';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -44,7 +44,7 @@ import { ProfileComponent } from './profile/profile.component';
     CommonModule,
     FormsModule,
   ],
-  providers: [provideHttpClient()],
+  providers: [provideHttpClient(), provideHttpClient()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

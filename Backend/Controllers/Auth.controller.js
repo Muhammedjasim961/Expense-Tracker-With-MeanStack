@@ -43,10 +43,25 @@ const userLogin = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Password is not Matching" });
     }
+    // MANUAL expiration calculation (bypasses system clock issue)
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+    const expirationTime = currentTimeInSeconds + 7 * 24 * 60 * 60; // 7 days from now
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    //   id: user._id,
+    //   iat: currentTimeInSeconds, // Manual issue time
+    //   exp: expirationTime,
+    // });
+    const token = jwt.sign(
+      {
+        id: user._id,
+        iat: currentTimeInSeconds, // Manual issue time
+        exp: expirationTime, // Manual expiration time
+      },
+      process.env.JWT_SECRET
+      // Don't use expiresIn when manually setting exp/iat
+    );
+    console.log("Token will expire at:", new Date(expirationTime * 1000));
 
     res.json({
       message: token,
@@ -61,5 +76,17 @@ const userLogin = async (req, res) => {
     res.status(500).json({ message: "Server error during login" });
   }
 };
+// PROFILE ROUTES
+// const userProfile = async (req, res) => {
+//   try {
+//     const profile = await User.findById(req.user.id);
+//     if (!profile) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     res.json(profile);
+//   } catch (error) {
+//     res.status(500).json({ message: "Error fetching profile", error });
+//   }
+// };
 
 module.exports = { userRegister, userLogin };
