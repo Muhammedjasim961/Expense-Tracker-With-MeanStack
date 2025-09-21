@@ -1,7 +1,59 @@
 <div class="charts-container">
+  <!-- Header -->
+  <div class="chart-header">
+    <h1>💰 Expense Analytics</h1>
+    <p>Track and analyze your spending patterns</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <h3>Annual Total</h3>
+        <span class="stat-value">{{
+          getFormattedCurrency(totalAnnualExpenses)
+        }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📈</div>
+      <div class="stat-content">
+        <h3>Monthly Average</h3>
+        <span class="stat-value">{{
+          getFormattedCurrency(averageMonthlyExpense)
+        }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-content">
+        <h3>This Month</h3>
+        <span class="stat-value">{{
+          getFormattedCurrency(currentMonthExpense)
+        }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-content">
+        <h3>Highest Month</h3>
+        <span class="stat-value">{{ highestExpenseMonth }}</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Monthly Expenses Chart -->
   <div class="chart-card">
-    <h3>Monthly Expenses Overview</h3>
+    <div class="chart-header">
+      <h2>📅 Monthly Expenses Trend</h2>
+      <span class="chart-subtitle"
+        >Visualize your spending throughout the year</span
+      >
+    </div>
     <google-chart
       [title]="monthlyTitle"
       [type]="monthlyType"
@@ -13,23 +65,14 @@
       (select)="onMonthlyChartSelect($event)"
     >
     </google-chart>
-
-    <!-- Summary Statistics -->
-    <div class="chart-stats">
-      <div class="stat-item">
-        <span class="stat-label">Total Annual Expenses:</span>
-        <span class="stat-value">₹{{ getTotalAnnualExpenses() | number }}</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Highest Spending Month:</span>
-        <span class="stat-value">{{ getHighestExpenseMonth() }}</span>
-      </div>
-    </div>
   </div>
 
   <!-- Individual Expenses Chart -->
   <div class="chart-card">
-    <h3>Individual Expenses</h3>
+    <div class="chart-header">
+      <h2>🧾 Individual Expenses</h2>
+      <span class="chart-subtitle">Breakdown of your expense categories</span>
+    </div>
     <google-chart
       [title]="individualTitle"
       [type]="individualType"

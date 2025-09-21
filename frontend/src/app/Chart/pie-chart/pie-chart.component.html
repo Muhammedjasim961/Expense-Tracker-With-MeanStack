@@ -1,12 +1,105 @@
-<div class="chart-container">
-  <google-chart
-    [title]="title"
-    [type]="type"
-    [data]="data"
-    [columns]="columnNames"
-    [options]="options"
-    [width]="width"
-    [height]="height"
-  >
-  </google-chart>
+<div class="pie-chart-container">
+  <!-- Header -->
+  <div class="chart-header">
+    <h2>💰 Expense Breakdown</h2>
+    <p>Visualize where your money is going</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="chart-content">
+    <!-- Chart Container -->
+    <div class="chart-main">
+      <div class="pie-chart-wrapper">
+        <google-chart
+          [title]="title"
+          [type]="type"
+          [data]="data"
+          [columns]="columnNames"
+          [options]="options"
+          [width]="width"
+          [height]="height"
+          (select)="onChartSelect($event)"
+          (ready)="onChartReady($event)"
+        >
+        </google-chart>
+      </div>
+
+      <!-- Center Text for Donut Chart -->
+      <div class="chart-center-text" *ngIf="totalExpenses > 0">
+        <div class="total-amount-main">
+          {{ getFormattedCurrency(totalExpenses) }}
+        </div>
+        <div class="total-label-main">Total Expenses</div>
+      </div>
+    </div>
+
+    <!-- Statistics Panel -->
+    <div class="statistics-panel">
+      <div class="statistics-header">
+        <h3>📊 Quick Stats</h3>
+        <div class="total-expense-card">
+          <div class="total-label">Total Spent</div>
+          <div class="total-amount">
+            {{ getFormattedCurrency(totalExpenses) }}
+          </div>
+        </div>
+      </div>
+
+      <div class="statistics-grid">
+        <div class="stat-item">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <span class="stat-label">Categories</span>
+            <span class="stat-value">{{ categoryCount }}</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-info">
+            <span class="stat-label">Largest Category</span>
+            <span class="stat-value">{{ largestCategory || "N/A" }}</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">💎</div>
+          <div class="stat-info">
+            <span class="stat-label">Largest Amount</span>
+            <span class="stat-value">{{
+              getFormattedCurrency(largestAmount)
+            }}</span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">📈</div>
+          <div class="stat-info">
+            <span class="stat-label">Percentage</span>
+            <span class="stat-value">{{ getPercentage(largestAmount) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category List -->
+      <div class="category-list" *ngIf="data.length > 0 && totalExpenses > 0">
+        <h4>🎯 Category Breakdown</h4>
+        <div class="category-items">
+          <div *ngFor="let item of data; let i = index" class="category-item">
+            <div
+              class="category-color"
+              [style.background]="colorPalette[i % colorPalette.length]"
+            ></div>
+            <span class="category-name">{{ item[0] }}</span>
+            <span class="category-amount">{{
+              getFormattedCurrency(item[1])
+            }}</span>
+            <span class="category-percentage">{{
+              getPercentage(item[1])
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
