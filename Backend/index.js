@@ -125,9 +125,10 @@ app.get("/health", (req, res) => {
 // ================= DATABASE CONNECTION =================
 
 mongoose
-  .connect(
-    "mongodb+srv://jasimwayanad961:ou3mKGK2tVPnTUYh@cluster0.3qqc6xd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-  )
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     // API ROUTES FIRST
     app.use("/api", ExpenseRoute); // ✅ All expense routes under /api/expenses
