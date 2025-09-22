@@ -13,9 +13,6 @@ export class UserService {
   //with a BehaviorSubject (reactive variable) that tells the whole app whether the user is logged in or not.
   // private userSubject = new BehaviorSubject<any>(this.getUserFromStorage());
   constructor(private http: HttpClient) {
-    this.apiUrl = 'http://localhost:3005';
-    console.log('FORCED API URL:', this.apiUrl);
-
     console.log('Current API URL:', environment.apiUrl);
     console.log('Production mode:', environment.production);
     if (!environment.production) {
@@ -69,15 +66,6 @@ export class UserService {
   private hasToken(): boolean {
     return !!localStorage.getItem('token');
   }
-  //BACKEND URLS
-  //  loginUser = 'http://localhost:3005/login';
-  //  userExits = 'http://localhost:3005/';
-  //registerUser = 'http://localhost:3005/register';
-  //  insertExpenses = 'http://localhost:3005/insertExpense';
-  //DeleteOneExpense = 'http://localhost:3005/deleteExpense/';
-  // EditExpense = 'http://localhost:3005/updateExpense';
-  // expensesById = 'http://localhost:3005/expense/';
-  // pagination = 'http://localhost:3000/expenses'; // backend URL
 
   // Add this to your service methods for debugging
   userLogin(email: any, password: any): Observable<any> {
