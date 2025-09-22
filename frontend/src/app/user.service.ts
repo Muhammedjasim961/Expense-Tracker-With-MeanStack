@@ -7,12 +7,13 @@ import { environment } from '../environments/environment';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = 'https://expense-tracker-backend-bwt0.onrender.com';
 
   isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   //with a BehaviorSubject (reactive variable) that tells the whole app whether the user is logged in or not.
   // private userSubject = new BehaviorSubject<any>(this.getUserFromStorage());
   constructor(private http: HttpClient) {
+    console.log('this.apiUrl:', this.apiUrl);
     console.log('Current API URL:', environment.apiUrl);
     console.log('Production mode:', environment.production);
     if (!environment.production) {
