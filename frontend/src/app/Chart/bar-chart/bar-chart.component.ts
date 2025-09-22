@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UserService } from '../../user.service';
 
 @Component({
@@ -143,7 +143,10 @@ export class BarChartComponent implements OnInit {
   averageMonthlyExpense = 0;
   currentMonthExpense = 0;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadIndividualExpenses();
@@ -240,11 +243,20 @@ export class BarChartComponent implements OnInit {
   onMonthlyChartSelect(event: any): void {
     console.log('Monthly chart selected:', event);
   }
-
+  private drawCharts(): void {
+    // If using Google Charts directly, you would redraw them here
+    // For Angular Google Charts component, the data binding should update automatically
+    // You might need to trigger change detection if using ChangeDetectionStrategy.OnPush
+    this.changeDetectorRef.detectChanges();
+  }
   deleteExpense(id: number): void {
     this.userService.DeleteExpense(id).subscribe(() => {
       this.loadIndividualExpenses();
       this.loadMonthlyExpenses();
+
+      // If using Google Charts directly, you might need to manually trigger redraw
+      // Depending on how you've implemented the charts
+      this.drawCharts();
     });
   }
 

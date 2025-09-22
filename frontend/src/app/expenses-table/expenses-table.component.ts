@@ -184,6 +184,7 @@ export class ExpensesTableComponent implements OnInit, OnChanges {
           0
         );
       }
+      window.location.reload();
       this.router.navigate(['/dashboard']);
       this.showMessage();
       this.loadExpenses(); // reload previous page from server
