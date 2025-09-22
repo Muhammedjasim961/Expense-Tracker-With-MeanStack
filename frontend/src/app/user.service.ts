@@ -86,11 +86,8 @@ export class UserService {
 
   // In user.service.ts
   registerUserData(user: any) {
-    const url = `${this.apiUrl}/api/auth/register`;
-    console.log('Service calling URL:', url); // ← Add this
-    console.log('With data:', user);
+    return this.http.post(`${this.apiUrl}/api/auth/register`, user);
 
-    return this.http.post(url, user);
     // ✅ Use the correct endpoint
     // return this.http.post(`${this.apiUrl}/api/auth/register`, user);
   }

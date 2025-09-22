@@ -1,5 +1,4 @@
-// environment.prod.ts - PRODUCTION
 export const environment = {
   production: true,
-  apiUrl: 'https://expensetracker.com', // ← Keep this for production
+  apiUrl: 'https://expense-tracker-backend-bwt0.onrender.com', // Your Render URL
 };

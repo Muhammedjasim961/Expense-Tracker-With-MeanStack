@@ -34,17 +34,17 @@ const path = require("path");
 //   next();
 // });
 // ================= CORS CONFIGURATION =================
-app.use(
-  cors({
-    origin: [
-      "http://localhost:4200", // Development
-      "https://expensetracker.com", // Production - UPDATE THIS
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:4200", // Development
+//       "https://expensetracker.com", // Production - UPDATE THIS
+//     ],
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true,
+//   })
+// );
 // // TEMPORARY - Allow all origins (remove for production)
 // app.use((req, res, next) => {
 //   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -98,14 +98,20 @@ app.use((req, res, next) => {
   next();
 });
 // In your server.js backend
+// CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:4200", // Your Angular dev server
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: [
+      "https://expense-tracker-backend-bwt0.onrender.com", // Your Render URL
+      "http://localhost:4200", // Angular dev server
+      "http://localhost:3005", // Your local backend
+    ],
     credentials: true,
   })
 );
+
+// Or allow all origins (for testing)
+app.use(cors());
 
 // app.options("/api/auth/register", (req, res) => {
 //   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
