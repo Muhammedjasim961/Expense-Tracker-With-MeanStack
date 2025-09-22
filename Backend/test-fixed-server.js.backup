@@ -1,0 +1,13 @@
+// test-routes.js - Export a function instead of creating app
+console.log("Testing route files...");
+
+module.exports = function testRoutes(app) {
+  try {
+    const ExpenseRoute = require("./Route/Expense.route");
+    app.use("/test-expense", ExpenseRoute);
+    console.log("✅ Expense.route.js loaded successfully");
+  } catch (error) {
+    console.log("❌ Error in Expense.route.js:", error.message);
+  }
+  // ... rest of the testing code
+};

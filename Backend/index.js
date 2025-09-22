@@ -131,10 +131,7 @@ app.get("/health", (req, res) => {
 // ================= DATABASE CONNECTION =================
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI, {})
   .then(() => {
     // API ROUTES FIRST
     app.use("/api", ExpenseRoute); // ✅ All expense routes under /api/expenses
@@ -233,6 +230,7 @@ mongoose
     app.use(express.static(path.join(__dirname, "public/browser")));
     // This is crucial - serve static files correctly
     app.use(express.static(path.join(__dirname, "public", "browser")));
+
     // ================= CATCH-ALL ROUTE LAST =================
     // THIS MUST BE THE VERY LAST ROUTE!
     // app.get("*", (req, res) => {
@@ -292,3 +290,10 @@ function authMiddleware(req, res, next) {
     return res.status(401).json({ message: "Token verification failed" });
   }
 }
+// Use a regex pattern instead
+app.get(/\/(.*)/, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+});
+// app.get('/:any', (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+// });
