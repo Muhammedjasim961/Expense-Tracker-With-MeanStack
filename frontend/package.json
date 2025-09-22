@@ -5,8 +5,8 @@
     "ng": "ng",
     "start": "ng serve ",
     "build:prod": "ng build --configuration production",
-    "deploy:setup": "npm run build:prod && cp -r dist/frontend/* backend/public/browser/",
-    "start:prod": "cd backend && NODE_ENV=production npm start",
+    "deploy:setup": "npm run build:prod && cp -r dist/frontend/* Backend/public/browser/",
+    "start:prod": "cd Backend && NODE_ENV=production npm start",
     "test": "ng test"
   },
   "private": true,

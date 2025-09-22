@@ -37,54 +37,54 @@ export class RegisterComponent {
     ]),
   });
 
-  // registerUserFormDetails() {
-  //   const userData = this.registerForm.value;
-  //   console.log('Registering user:', userData);
-
-  //   this.userService
-  //     .checkingUserExits(this.registerForm.value.username)
-  //     .subscribe({
-  //       next: (result) => {
-  //         if (result && result.username === this.registerForm.value.username) {
-  //           alert('User already exists!');
-  //           return;
-  //         }
-
-  //         this.userService.registerUserData(this.registerForm.value).subscribe({
-  //           next: (res) => {
-  //             this.router.navigate(['/login']); // ✅ use this.router
-  //             this.showMessage();
-  //             console.log('Register success:', res);
-  //           },
-  //           error: (err) => {
-  //             alert(err.error.message || 'Registration failed');
-  //           },
-  //         });
-  //       },
-  //       error: (err) => {
-  //         console.error('Error checking user:', err);
-  //         alert('Something went wrong while checking user');
-  //       },
-  //     });
-  // }
   registerUserFormDetails() {
-    if (this.registerForm.valid) {
-      const userData = this.registerForm.value;
+    const userData = this.registerForm.value;
+    console.log('Registering user:', userData);
 
-      // ✅ Use the service properly
-      this.userService.registerUserData(userData).subscribe({
-        next: (response) => {
-          console.log('Registration successful:', response);
-          this.router.navigate(['/login']);
-          this.showMessage();
+    this.userService
+      .checkingUserExits(this.registerForm.value.username)
+      .subscribe({
+        next: (result) => {
+          if (result && result.username === this.registerForm.value.username) {
+            alert('User already exists!');
+            return;
+          }
+
+          this.userService.registerUserData(this.registerForm.value).subscribe({
+            next: (res) => {
+              this.router.navigate(['/login']); // ✅ use this.router
+              this.showMessage();
+              console.log('Register success:', res);
+            },
+            error: (err) => {
+              alert(err.error.message || 'Registration failed');
+            },
+          });
         },
-        error: (error) => {
-          console.log('Registration failed:', error);
-          alert('Registration failed: ' + error.message);
+        error: (err) => {
+          console.error('Error checking user:', err);
+          alert('Something went wrong while checking user');
         },
       });
-    }
   }
+  // registerUserFormDetails() {
+  //   if (this.registerForm.valid) {
+  //     const userData = this.registerForm.value;
+
+  //     // ✅ Use the service properly
+  //     this.userService.registerUserData(userData).subscribe({
+  //       next: (response) => {
+  //         console.log('Registration successful:', response);
+  //         this.router.navigate(['/login']);
+  //         this.showMessage();
+  //       },
+  //       error: (error) => {
+  //         console.log('Registration failed:', error);
+  //         alert('Registration failed: ' + error.message);
+  //       },
+  //     });
+  //   }
+  // }
   showMessage() {
     this._snackBar.open('Registered successfully!', 'Close', {
       duration: 1500,
