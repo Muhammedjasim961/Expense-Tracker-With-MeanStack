@@ -83,6 +83,8 @@ export class AppComponent implements OnInit {
 
   // update UI whenever login/logout happens
   ngOnInit() {
+    console.log('checking troubling Routes:', this.router.config);
+
     this.userService.user$.subscribe((user) => {
       if (user) {
         this.username = user.username;
