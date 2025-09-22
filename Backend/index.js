@@ -224,7 +224,8 @@ mongoose
 
     // ================= STATIC FILES =================
     app.use(express.static(path.join(__dirname, "public/browser")));
-
+    // This is crucial - serve static files correctly
+    app.use(express.static(path.join(__dirname, "public", "browser")));
     // ================= CATCH-ALL ROUTE LAST =================
     // THIS MUST BE THE VERY LAST ROUTE!
     // app.get("*", (req, res) => {
