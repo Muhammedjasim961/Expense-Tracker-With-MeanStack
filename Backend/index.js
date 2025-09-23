@@ -294,6 +294,6 @@ function authMiddleware(req, res, next) {
 app.get(/\/(.*)/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
 });
-// app.get('/:any', (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
-// });
+app.get("/:any", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+});
