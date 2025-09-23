@@ -5,6 +5,7 @@ import { UserService } from '../../user.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+  apiUrl = environment.apiUrl;
   constructor(
     private userService: UserService,
     private router: Router,
@@ -40,6 +42,10 @@ export class RegisterComponent {
   registerUserFormDetails() {
     const userData = this.registerForm.value;
     console.log('Registering user:', userData);
+    console.log(
+      'Sending registration request to:',
+      `${this.apiUrl}/api/auth/register`
+    );
 
     this.userService
       .checkingUserExits(this.registerForm.value.username)

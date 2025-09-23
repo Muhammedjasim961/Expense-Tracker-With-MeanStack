@@ -10,7 +10,16 @@ const AuthRoute = require("./Route/Auth.route");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+// Or allow all origins (for testing)
+app.use(cors());
 
+app.options("/api/auth/register", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.status(200).send();
+});
 // ================= SIMPLE CORS MIDDLEWARE =================
 // // Add this at the VERY TOP, before any other middleware or routes
 // app.use((req, res, next) => {
@@ -110,16 +119,6 @@ app.use(
   })
 );
 
-// Or allow all origins (for testing)
-app.use(cors());
-
-// app.options("/api/auth/register", (req, res) => {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.status(200).send();
-// });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -227,13 +226,7 @@ mongoose
     });
 
     // ================= STATIC FILES =================
-    app.use(express.static(path.join(__dirname, "public/browser")), {
-      setHeaders: (res, path) => {
-        if (path.endsWith(".js")) {
-          res.setHeader("Content-Type", "application/javascript");
-        }
-      },
-    });
+    //app.use(express.static(path.join(__dirname, "public/browser")), {});
     // This is crucial - serve static files correctly
     app.use(express.static(path.join(__dirname, "public", "browser")));
 
@@ -302,4 +295,15 @@ function authMiddleware(req, res, next) {
 // });
 // app.get("/:any", (req, res) => {
 //   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+// });
+// app.get("", (req, res) => {
+//   console.log("Catch-all route triggered for:", req.url);
+
+//   // Only send index.html for non-API routes
+//   if (!req.url.startsWith("/api/")) {
+//     res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+//   } else {
+//     // For API routes that don't exist, return 404
+//     res.status(404).json({ message: "API endpoint not found" });
+//   }
 // });
