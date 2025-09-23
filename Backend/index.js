@@ -227,7 +227,13 @@ mongoose
     });
 
     // ================= STATIC FILES =================
-    app.use(express.static(path.join(__dirname, "public/browser")));
+    app.use(express.static(path.join(__dirname, "public/browser")), {
+      setHeaders: (res, path) => {
+        if (path.endsWith(".js")) {
+          res.setHeader("Content-Type", "application/javascript");
+        }
+      },
+    });
     // This is crucial - serve static files correctly
     app.use(express.static(path.join(__dirname, "public", "browser")));
 
@@ -291,9 +297,9 @@ function authMiddleware(req, res, next) {
   }
 }
 // Use a regex pattern instead
-app.get(/\/(.*)/, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
-});
-app.get("/:any", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
-});
+// app.get(/\/(.*)/, (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+// });
+// app.get("/:any", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+// });
