@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "cd ../frontend && npm install --legacy-peer-deps && npm run build:prod",
-    "render-build": "npm install && npm run build"
+    "build": "cd ../frontend && npx ng build --configuration production",
+    "render-build": "cd ../frontend && npm install --legacy-peer-deps && npx ng build --configuration production && cd ../backend && npm install"
   },
   "keywords": [],
   "author": "",
