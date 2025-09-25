@@ -184,10 +184,25 @@ export class ExpensesTableComponent implements OnInit, OnChanges {
           0
         );
       }
-      window.location.reload();
-      this.router.navigate(['/dashboard']);
+      this.refreshData();
+      //this.refreshPage();
       this.showMessage();
       this.loadExpenses(); // reload previous page from server
+    });
+  }
+  // In your chart component
+  refreshData() {
+    // Reload just the data, not the entire page
+    this.refreshPage();
+
+    // Or if you really need to reload the component:
+    this.router.navigate(['/dashboard'], {
+      queryParams: { refresh: new Date().getTime() },
+    });
+  }
+  refreshPage() {
+    this.router.navigate([this.router.url]).then(() => {
+      console.log('Page refreshed successfully');
     });
   }
 

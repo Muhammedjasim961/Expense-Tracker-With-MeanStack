@@ -109,4 +109,8 @@ export class UserService {
   setPagination(page: number, limit: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/expenses?page=${page}&limit=${limit}`);
   }
+  // Get all expenses from your API
+  getAllExpenses(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/`);
+  }
 }

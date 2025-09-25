@@ -159,29 +159,41 @@
       id="navbar-user"
     >
       <ul
-        class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+        class="flex font-bold flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-700 md:dark:bg-gray-700 dark:border-gray-700"
       >
         <li>
-          <a
+          <button
             routerLink="/dashboard"
             routerLinkActive="active-link"
             [routerLinkActiveOptions]="{ exact: true }"
-            class="block py-2 px-3 rounded-sm md:p-0"
+            class="block py-2 px-3 rounded-sm md:p-0 cursor-pointer"
             aria-current="page"
           >
-            Home
-          </a>
+            <Data>DASHBOARD</Data>
+          </button>
         </li>
 
         <li>
-          <a
+          <button
+            *ngIf="!username"
             routerLink="/register"
             routerLinkActive="active-link"
             [routerLinkActiveOptions]="{ exact: true }"
-            class="block py-2 px-3 rounded-sm md:p-0"
+            class="block py-2 px-3 rounded-sm md:p-0 cursor-pointer"
           >
-            Register
-          </a>
+            REGISTER
+          </button>
+        </li>
+        <li>
+          <button
+            *ngIf="!username"
+            routerLink="/login"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="block py-2 px-3 rounded-sm md:p-0 cursor-pointer"
+          >
+            LOGIN
+          </button>
         </li>
 
         <li>
@@ -204,7 +216,7 @@
                 d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
               />
             </svg>
-            <span>Sign Out</span>
+            <span>SIGN OUT</span>
           </button>
         </li>
       </ul>

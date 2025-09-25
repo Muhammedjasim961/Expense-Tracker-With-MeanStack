@@ -15,6 +15,7 @@ import { environment } from '../../../environments/environment';
 })
 export class RegisterComponent {
   apiUrl = environment.apiUrl;
+  registrationStatus: boolean = true;
   constructor(
     private userService: UserService,
     private router: Router,

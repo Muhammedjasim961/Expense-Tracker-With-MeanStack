@@ -14,14 +14,21 @@ export class AppComponent implements OnInit {
   username: string | null = '';
   email: string | null = '';
   userSignOutLogo: boolean = false;
+  registerStatus: boolean = true;
   constructor(
     private _snackBar: MatSnackBar,
     private router: Router,
     private userService: UserService
   ) {
     const storedUser: any = localStorage.getItem('user');
-    // console.log('storedUser', storedUser);
-    // const StringUser = JSON.parse(storedUser); // convert to object
+    console.log('storedUser', storedUser);
+    const StringUser = JSON.parse(storedUser); // convert to object
+    const getUserName = (this.username = StringUser?.username || null);
+    // if (getUserName) {
+    //   this.registerStatus = false;
+    // } else {
+    //   this.registerStatus = true;
+    // }
     // console.log('StringUser', StringUser.username);
     // this.username = StringUser.username || 'getting User Delay';
 
@@ -38,12 +45,14 @@ export class AppComponent implements OnInit {
     console.log('StringUser', StringUser.username);
     this.username = StringUser.username || 'getting User Delay';
     if (this.username) {
+      console.log('username exists:', this.username);
       this.username;
       return;
     } else {
       alert('User not logged in');
+      this.userSignOutLogo = !!this.email; // true if email exists
+      this.registerStatus = !!this.username; // true if email exists
     }
-    this.userSignOutLogo = !!this.email; // true if email exists
     this.userSignOutLogo = !!this.username; // true if user exists
   }
 

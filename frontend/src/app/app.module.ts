@@ -23,6 +23,7 @@ import { ExpensesTableComponent } from './expenses-table/expenses-table.componen
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ChartDashboardComponent } from './chart-dashboard/chart-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ProfileComponent } from './profile/profile.component';
     SpinnerComponent,
     ExpenseEditComponent,
     ProfileComponent,
+    ChartDashboardComponent,
   ],
   imports: [
     BrowserModule,

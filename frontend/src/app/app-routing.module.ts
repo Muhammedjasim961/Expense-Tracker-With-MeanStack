@@ -7,6 +7,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 import { authGuard } from './auth.guard';
 import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
 import { ProfileComponent } from './profile/profile.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -47,5 +48,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: false })], // Important: useHash false
   exports: [RouterModule],
+  //This will make your URLs look like http://yoursite.com/#/dashboard and prevent the 404 error on refresh.
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
 })
 export class AppRoutingModule {}

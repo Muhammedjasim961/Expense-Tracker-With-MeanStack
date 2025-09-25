@@ -1,88 +1,185 @@
-<div class="charts-container">
-  <!-- Header -->
-  <div class="chart-header">
-    <h1>💰 Expense Analytics</h1>
-    <p>Track and analyze your spending patterns</p>
-  </div>
-
-  <!-- Statistics Cards -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon">📊</div>
-      <div class="stat-content">
-        <h3>Annual Total</h3>
-        <span class="stat-value">{{
-          getFormattedCurrency(totalAnnualExpenses)
-        }}</span>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon">📈</div>
-      <div class="stat-content">
-        <h3>Monthly Average</h3>
-        <span class="stat-value">{{
-          getFormattedCurrency(averageMonthlyExpense)
-        }}</span>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon">⭐</div>
-      <div class="stat-content">
-        <h3>This Month</h3>
-        <span class="stat-value">{{
-          getFormattedCurrency(currentMonthExpense)
-        }}</span>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon">🔥</div>
-      <div class="stat-content">
-        <h3>Highest Month</h3>
-        <span class="stat-value">{{ highestExpenseMonth }}</span>
-      </div>
+<div class="dashboard-container">
+  <!-- Loading Screen -->
+  <div class="loading-screen" *ngIf="isLoading">
+    <div class="loading-content">
+      <h3>Loading Your Financial Insights</h3>
+      <p>Fetching data from your database...</p>
     </div>
   </div>
 
-  <!-- Monthly Expenses Chart -->
-  <div class="chart-card">
-    <div class="chart-header">
-      <h2>📅 Monthly Expenses Trend</h2>
-      <span class="chart-subtitle"
-        >Visualize your spending throughout the year</span
+  <!-- Main Content -->
+  <div class="main-content" *ngIf="!isLoading">
+    <!-- Header -->
+    <div class="dashboard-header text-center">
+      <button
+        class="refresh-btn flex justify-center items-center"
+        (click)="refreshDashboard()"
+        [disabled]="isRefreshing"
       >
+        {{
+          isRefreshing ? "🔄 Refreshing..." : "🔄 Refresh To see Chart Changes"
+        }}
+      </button>
     </div>
-    <google-chart
-      [title]="monthlyTitle"
-      [type]="monthlyType"
-      [data]="monthlyData"
-      [columns]="monthlyColumns"
-      [options]="monthlyOptions"
-      [width]="monthlyWidth"
-      [height]="monthlyHeight"
-      (select)="onMonthlyChartSelect($event)"
-    >
-    </google-chart>
-  </div>
 
-  <!-- Individual Expenses Chart -->
-  <div class="chart-card">
-    <div class="chart-header">
-      <h2>🧾 Individual Expenses</h2>
-      <span class="chart-subtitle">Breakdown of your expense categories</span>
+    <!-- Horizontal Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-content">
+          <h3>This Month Total</h3>
+          <div class="stat-amount">
+            {{ monthlyTotal | currency : "INR" : "symbol" : "1.0-0" }}
+          </div>
+          <div class="stat-subtitle">Current Month Spending</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-content">
+          <h3>Daily Average</h3>
+          <div class="stat-amount">
+            {{ dailyAverage | currency : "INR" : "symbol" : "1.0-0" }}
+          </div>
+          <div class="stat-subtitle">Per Day This Month</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🧾</div>
+        <div class="stat-content">
+          <h3>Transactions</h3>
+          <div class="stat-amount">{{ transactionCount }}</div>
+          <div class="stat-subtitle">This Month</div>
+        </div>
+      </div>
     </div>
-    <google-chart
-      [title]="individualTitle"
-      [type]="individualType"
-      [data]="individualData"
-      [columns]="individualColumns"
-      [options]="individualOptions"
-      [width]="individualWidth"
-      [height]="individualHeight"
-      (select)="onIndividualChartSelect($event)"
-    >
-    </google-chart>
+
+    <!-- Budget Section -->
+    <div class="budget-section">
+      <div class="budget-header">
+        <h2>🎯 Monthly Budget Progress</h2>
+        <div class="budget-input">
+          <input
+            type="number"
+            [(ngModel)]="monthlyBudget"
+            placeholder="Set monthly budget"
+          />
+          <button (click)="setBudget()">Update</button>
+        </div>
+      </div>
+
+      <div class="budget-details">
+        <div class="budget-numbers">
+          <div class="budget-item">
+            <span class="label">Spent:</span>
+            <span
+              class="amount"
+              [class.over-budget]="spentAmount > monthlyBudget"
+            >
+              {{ spentAmount | currency : "INR" : "symbol" : "1.0-0" }}
+            </span>
+          </div>
+          <div class="budget-item">
+            <span class="label">Budget:</span>
+            <span class="amount">{{
+              monthlyBudget | currency : "INR" : "symbol" : "1.0-0"
+            }}</span>
+          </div>
+          <div class="budget-item">
+            <span class="label">Remaining:</span>
+            <span class="amount" [class.positive]="remainingAmount >= 0">
+              {{ remainingAmount | currency : "INR" : "symbol" : "1.0-0" }}
+            </span>
+          </div>
+        </div>
+
+        <div class="budget-bar-container">
+          <div class="budget-bar">
+            <div
+              class="budget-fill"
+              [class.over-budget]="spentAmount > monthlyBudget"
+              [style.width.%]="budgetProgress"
+            ></div>
+          </div>
+          <div class="budget-percentage">{{ budgetProgress.toFixed(0) }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horizontal Monthly Chart -->
+    <div class="chart-section">
+      <div class="chart-header">
+        <h2>📈 Monthly Spending Trend</h2>
+        <span class="chart-subtitle">Last 12 Months</span>
+      </div>
+
+      <div class="horizontal-chart">
+        <div class="chart-bars">
+          <div class="bar-container" *ngFor="let month of monthlyData">
+            <div class="bar-wrapper">
+              <div
+                class="bar"
+                [style.height.px]="(month.amount / getMaxAmount()) * 150"
+                [title]="
+                  month.name +
+                  ': ' +
+                  (month.amount | currency : 'INR' : 'symbol' : '1.0-0')
+                "
+              >
+                <div class="bar-amount">
+                  {{ month.amount | currency : "INR" : "symbol" : "1.0-0" }}
+                </div>
+              </div>
+              <div class="bar-label">{{ month.name }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-color"></div>
+          <span>Monthly Spending</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Transactions Table -->
+    <div class="transactions-section">
+      <div class="section-header">
+        <h2>💳 Recent Transactions</h2>
+        <span class="count-badge"
+          >{{ recentTransactions.length }} transactions</span
+        >
+      </div>
+
+      <div class="transactions-table">
+        <div class="table-header">
+          <div class="col-date">Date</div>
+          <div class="col-name">Expense Name</div>
+          <div class="col-amount">Amount</div>
+          <div class="col-comments">Comments</div>
+        </div>
+
+        <div class="table-body">
+          <div class="table-row" *ngFor="let expense of recentTransactions">
+            <div class="col-date">
+              {{ expense.expense_date | date : "MMM dd, yyyy" }}
+            </div>
+            <div class="col-name">{{ expense.expense_name }}</div>
+            <div class="col-amount">
+              {{ expense.amount | currency : "INR" : "symbol" : "1.0-0" }}
+            </div>
+            <div class="col-comments">{{ expense.comments || "-" }}</div>
+          </div>
+
+          <div class="no-data" *ngIf="recentTransactions.length === 0">
+            No transactions found in your database
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

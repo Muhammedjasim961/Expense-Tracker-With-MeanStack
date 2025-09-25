@@ -1,6 +1,34 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { UserService } from '../../user.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { User } from '../../user';
+import { ExpenseService } from '../../expense.service';
 
+interface Expense {
+  expense_name: string;
+  amount: number;
+  expense_date: string;
+  expense_category: string;
+  comments: string;
+}
+
+interface CategoryData {
+  name: string;
+  amount: number;
+}
+
+interface MonthlyData {
+  name: string;
+  amount: number;
+}
 @Component({
   selector: 'app-bar-chart',
   standalone: false,
@@ -8,264 +36,197 @@ import { UserService } from '../../user.service';
   styleUrls: ['./bar-chart.component.css'],
 })
 export class BarChartComponent implements OnInit {
-  // Modern color palette
-  colorPalette = [
-    '#667eea',
-    '#764ba2',
-    '#f093fb',
-    '#f5576c',
-    '#4facfe',
-    '#00f2fe',
-    '#43e97b',
-    '#38f9d7',
-    '#fa709a',
-    '#fee140',
-    '#a8edea',
-    '#fed6e3',
-  ];
+  // Loading states
+  isLoading: boolean = true;
+  isRefreshing: boolean = false;
 
-  // Individual Expenses Chart
-  individualTitle = 'Individual Expenses';
-  individualType: any = 'ColumnChart';
-  individualData: any[] = [];
-  individualColumns = ['Expense', 'Amount', { role: 'style', type: 'string' }];
-  individualOptions = {
-    legend: { position: 'none' },
-    backgroundColor: {
-      fill: 'transparent',
-      stroke: '#e0e6ed',
-      strokeWidth: 1,
-    },
-    chartArea: {
-      width: '85%',
-      height: '75%',
-      backgroundColor: {
-        stroke: '#e0e6ed',
-        strokeWidth: 1,
-      },
-    },
-    hAxis: {
-      title: 'Expenses',
-      textStyle: { color: '#64748b', fontSize: 12, fontName: 'Inter' },
-      titleTextStyle: {
-        color: '#334155',
-        fontSize: 14,
-        fontName: 'Inter',
-        bold: true,
-      },
-    },
-    vAxis: {
-      title: 'Amount (₹)',
-      format: '₹#,##0',
-      textStyle: { color: '#64748b', fontSize: 12, fontName: 'Inter' },
-      titleTextStyle: {
-        color: '#334155',
-        fontSize: 14,
-        fontName: 'Inter',
-        bold: true,
-      },
-      gridlines: { color: '#f1f5f9', count: 5 },
-    },
-    bar: { groupWidth: '65%' },
-    animation: {
-      startup: true,
-      duration: 1000,
-      easing: 'out',
-    },
-    tooltip: {
-      textStyle: { color: '#1e293b', fontName: 'Inter' },
-      showColorCode: true,
-    },
-  };
-  individualWidth = 650;
-  individualHeight = 450;
-
-  // Monthly Expenses Chart
-  monthlyTitle = 'Monthly Expenses Overview';
-  monthlyType: any = 'ColumnChart';
-  monthlyData: any[] = [];
-  monthlyColumns = ['Month', 'Total Amount', { role: 'style', type: 'string' }];
-  monthlyOptions = {
-    legend: { position: 'none' },
-    backgroundColor: {
-      fill: 'transparent',
-      stroke: '#e0e6ed',
-      strokeWidth: 1,
-    },
-    chartArea: {
-      width: '85%',
-      height: '75%',
-      backgroundColor: {
-        stroke: '#e0e6ed',
-        strokeWidth: 1,
-      },
-    },
-    hAxis: {
-      title: 'Months',
-      textStyle: { color: '#64748b', fontSize: 12, fontName: 'Inter' },
-      titleTextStyle: {
-        color: '#334155',
-        fontSize: 14,
-        fontName: 'Inter',
-        bold: true,
-      },
-    },
-    vAxis: {
-      title: 'Total Amount (₹)',
-      format: '₹#,##0',
-      textStyle: { color: '#64748b', fontSize: 12, fontName: 'Inter' },
-      titleTextStyle: {
-        color: '#334155',
-        fontSize: 14,
-        fontName: 'Inter',
-        bold: true,
-      },
-      gridlines: { color: '#f1f5f9', count: 5 },
-    },
-    bar: { groupWidth: '75%' },
-    animation: {
-      startup: true,
-      duration: 1200,
-      easing: 'out',
-    },
-    tooltip: {
-      textStyle: { color: '#1e293b', fontName: 'Inter' },
-      showColorCode: true,
-      isHtml: true,
-    },
-  };
-  monthlyWidth = 850;
-  monthlyHeight = 500;
+  // All expenses from database
+  allExpenses: Expense[] = [];
 
   // Statistics
-  totalAnnualExpenses = 0;
-  highestExpenseMonth = '';
-  averageMonthlyExpense = 0;
-  currentMonthExpense = 0;
+  monthlyTotal: number = 0;
+  dailyAverage: number = 0;
+  transactionCount: number = 0;
 
-  constructor(
-    private userService: UserService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  // Budget
+  monthlyBudget: number = 0;
+  spentAmount: number = 0;
+  remainingAmount: number = 0;
+  budgetProgress: number = 0;
 
-  ngOnInit(): void {
-    this.loadIndividualExpenses();
-    this.loadMonthlyExpenses();
+  // Recent transactions
+  recentTransactions: Expense[] = [];
+
+  // Monthly data for horizontal chart
+  monthlyData: any[] = [];
+
+  constructor(private expenseService: ExpenseService) {}
+
+  ngOnInit() {
+    this.loadBudgetFromStorage();
+    this.loadRealData();
   }
 
-  // Load individual expenses
-  loadIndividualExpenses(): void {
-    this.userService.showExpenses().subscribe((res: any[]) => {
-      this.individualData = res.map((expense, index) => [
-        expense.expense_name,
-        Number(expense.amount),
-        this.colorPalette[index % this.colorPalette.length],
-      ]);
+  // Load real data from your API
+  loadRealData() {
+    this.isLoading = true;
+
+    this.expenseService.getAllExpenses().subscribe({
+      next: (expenses: Expense[]) => {
+        console.log('Received expenses from API:', expenses);
+        this.allExpenses = expenses;
+        this.processRealExpensesData(expenses);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching expenses:', error);
+        this.isLoading = false;
+        // Initialize with empty data if API fails
+        this.initializeWithEmptyData();
+      },
     });
   }
 
-  // Load and calculate monthly expenses
-  loadMonthlyExpenses(): void {
-    this.userService.settingDataToPieChart().subscribe((result: any[]) => {
-      const monthlyTotals = Array(12).fill(0);
-      const monthNames = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
+  // Process real expenses data from your database
+  private processRealExpensesData(expenses: Expense[]) {
+    if (!expenses || expenses.length === 0) {
+      console.log('No expenses found in database');
+      this.initializeWithEmptyData();
+      return;
+    }
 
-      if (Array.isArray(result) && result.length > 0) {
-        result.forEach((expense) => {
-          if (expense.expense_date && expense.amount) {
-            const date = new Date(expense.expense_date);
-            if (!isNaN(date.getTime())) {
-              const month = date.getMonth();
-              monthlyTotals[month] += Number(expense.amount) || 0;
-            }
-          }
-        });
+    console.log('Processing', expenses.length, 'expenses from database');
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    // Filter current month expenses
+    const currentMonthExpenses = expenses.filter((expense) => {
+      try {
+        const expenseDate = new Date(expense.expense_date);
+        return (
+          expenseDate.getMonth() === currentMonth &&
+          expenseDate.getFullYear() === currentYear
+        );
+      } catch (error) {
+        console.error('Error parsing date:', expense.expense_date);
+        return false;
       }
-
-      // Prepare data for Google Charts with colors
-      this.monthlyData = monthNames.map((monthName, index) => [
-        monthName,
-        monthlyTotals[index],
-        this.colorPalette[index % this.colorPalette.length],
-      ]);
-
-      // Update statistics
-      this.updateStatistics(monthlyTotals);
     });
-  }
 
-  // Update statistics
-  private updateStatistics(monthlyTotals: number[]): void {
-    this.totalAnnualExpenses = monthlyTotals.reduce(
-      (sum, amount) => sum + amount,
+    // Calculate statistics
+    this.monthlyTotal = currentMonthExpenses.reduce(
+      (sum, expense) => sum + expense.amount,
       0
     );
-    this.averageMonthlyExpense = this.totalAnnualExpenses / 12;
+    this.dailyAverage = Math.round(this.monthlyTotal / currentDate.getDate());
+    this.transactionCount = currentMonthExpenses.length;
 
-    const currentMonth = new Date().getMonth();
-    this.currentMonthExpense = monthlyTotals[currentMonth];
+    // Process monthly data for horizontal chart
+    this.processMonthlyData(expenses);
 
-    const maxIndex = monthlyTotals.indexOf(Math.max(...monthlyTotals));
-    this.highestExpenseMonth = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ][maxIndex];
+    // Set recent transactions (latest 10)
+    this.recentTransactions = expenses
+      .sort(
+        (a, b) =>
+          new Date(b.expense_date).getTime() -
+          new Date(a.expense_date).getTime()
+      )
+      .slice(0, 10);
+
+    // Update budget progress
+    this.updateBudgetProgress();
+
+    console.log('Monthly Total:', this.monthlyTotal);
+    console.log('Transactions count:', this.transactionCount);
+    console.log('Monthly data:', this.monthlyData);
   }
 
-  // Chart events for interactivity
-  onIndividualChartSelect(event: any): void {
-    console.log('Individual chart selected:', event);
-  }
+  // Process monthly data for horizontal chart
+  private processMonthlyData(expenses: Expense[]) {
+    const monthlyMap = new Map<string, number>();
 
-  onMonthlyChartSelect(event: any): void {
-    console.log('Monthly chart selected:', event);
-  }
-  private drawCharts(): void {
-    // If using Google Charts directly, you would redraw them here
-    // For Angular Google Charts component, the data binding should update automatically
-    // You might need to trigger change detection if using ChangeDetectionStrategy.OnPush
-    this.changeDetectorRef.detectChanges();
-  }
-  deleteExpense(id: number): void {
-    this.userService.DeleteExpense(id).subscribe(() => {
-      this.loadIndividualExpenses();
-      this.loadMonthlyExpenses();
+    expenses.forEach((expense) => {
+      try {
+        const date = new Date(expense.expense_date);
+        const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}`;
+        const monthName = date.toLocaleDateString('en-US', {
+          month: 'short',
+          year: 'numeric',
+        });
 
-      // If using Google Charts directly, you might need to manually trigger redraw
-      // Depending on how you've implemented the charts
-      this.drawCharts();
+        const currentAmount = monthlyMap.get(monthYear) || 0;
+        monthlyMap.set(monthYear, currentAmount + expense.amount);
+      } catch (error) {
+        console.error('Error processing expense date:', expense.expense_date);
+      }
     });
+
+    // Convert to array and sort by date
+    this.monthlyData = Array.from(monthlyMap.entries())
+      .map(([monthYear, amount]) => ({
+        month: monthYear,
+        name: new Date(monthYear + '-01').toLocaleDateString('en-US', {
+          month: 'short',
+          year: 'numeric',
+        }),
+        amount: amount,
+      }))
+      .sort((a, b) => a.month.localeCompare(b.month))
+      .slice(-12); // Last 12 months
+
+    console.log('Processed monthly data:', this.monthlyData);
   }
 
-  // Get formatted currency
-  getFormattedCurrency(amount: number): string {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-    }).format(amount);
+  // Initialize with empty data
+  private initializeWithEmptyData() {
+    this.monthlyTotal = 0;
+    this.dailyAverage = 0;
+    this.transactionCount = 0;
+    this.monthlyData = [];
+    this.recentTransactions = [];
+    this.updateBudgetProgress();
+  }
+
+  // Budget methods
+  setBudget() {
+    localStorage.setItem('monthlyBudget', this.monthlyBudget.toString());
+    this.updateBudgetProgress();
+  }
+
+  private loadBudgetFromStorage() {
+    const savedBudget = localStorage.getItem('monthlyBudget');
+    if (savedBudget) {
+      this.monthlyBudget = parseInt(savedBudget, 10);
+    } else {
+      this.monthlyBudget = 10000; // Default budget
+    }
+  }
+
+  private updateBudgetProgress() {
+    this.spentAmount = this.monthlyTotal;
+    this.remainingAmount = this.monthlyBudget - this.spentAmount;
+    this.budgetProgress =
+      this.monthlyBudget > 0
+        ? Math.min(100, (this.spentAmount / this.monthlyBudget) * 100)
+        : 0;
+  }
+
+  // Get max amount for chart scaling
+  getMaxAmount(): number {
+    if (this.monthlyData.length === 0) return 100;
+    return Math.max(...this.monthlyData.map((item) => item.amount));
+  }
+
+  // Refresh dashboard
+  refreshDashboard() {
+    this.isRefreshing = true;
+    this.loadRealData();
+    setTimeout(() => {
+      this.isRefreshing = false;
+    }, 1000);
   }
 }
