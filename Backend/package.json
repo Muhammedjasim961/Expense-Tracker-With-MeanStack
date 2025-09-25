@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npm install && npm run build:angular",
-    "build:angular": "cd ../frontend && ng build --configuration production",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "render-build": "npm run build"
+    "build": "cd ../frontend && npm install && ng build --configuration production",
+    "render-build": "npm install && npm run build"
   },
   "keywords": [],
   "author": "",

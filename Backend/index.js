@@ -177,7 +177,7 @@ mongoose
 
     // ================= STATIC FILES =================
     // This is crucial - serve static files correctly
-    app.use(express.static(path.join(__dirname, "public", "browser")));
+    app.use(express.static(path.join(process.cwd(), "public", "browser")));
     // ================= SAFE CATCH-ALL ROUTE =================
 
     //happened express version issue npm list express path-to-regexp while caching all route
