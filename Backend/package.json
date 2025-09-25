@@ -6,7 +6,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build": "cd ../frontend && npx ng build --configuration production",
-    "render-build": "cd ../frontend && npm install --legacy-peer-deps && npx ng build --configuration production && cd ../backend && npm install"
+    "render-build": "cd ../frontend && npm run build:render && cd ../backend && npm install"
   },
   "keywords": [],
   "author": "",
