@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "cd ../frontend && npm install --legacy-peer-deps && npm run build:prod",
+    "build": "cd ../frontend && npm install --legacy-peer-deps && npx -y @angular/cli@latest build --configuration production",
     "render-build": "npm install && npm run build"
   },
   "keywords": [],
