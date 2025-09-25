@@ -39,7 +39,7 @@
           },
           "configurations": {
             "production": {
-              "outputPath": "../Backend/public",
+              "outputPath": "../Backend/public/browser/",
               "baseHref": "/",
               "optimization": true,
               "extractLicenses": true,

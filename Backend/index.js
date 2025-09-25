@@ -11,7 +11,6 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 // Or allow all origins (for testing)
-app.use(cors());
 
 app.options("/api/auth/register", (req, res) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
@@ -20,55 +19,7 @@ app.options("/api/auth/register", (req, res) => {
   res.header("Access-Control-Allow-Credentials", "true");
   res.status(200).send();
 });
-// ================= SIMPLE CORS MIDDLEWARE =================
-// // Add this at the VERY TOP, before any other middleware or routes
-// app.use((req, res, next) => {
-//   console.log("CORS Middleware triggered for:", req.method, req.url);
 
-//   // Set CORS headers
-//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, PUT, DELETE, OPTIONS"
-//   );
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-
-//   // Handle OPTIONS preflight request
-//   if (req.method === "OPTIONS") {
-//     console.log("OPTIONS preflight handled");
-//     return res.status(200).end();
-//   }
-
-//   next();
-// });
-// ================= CORS CONFIGURATION =================
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:4200", // Development
-//       "https://expensetracker.com", // Production - UPDATE THIS
-//     ],
-//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//     credentials: true,
-//   })
-// );
-// // TEMPORARY - Allow all origins (remove for production)
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, PUT, DELETE, OPTIONS"
-//   );
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-//   if (req.method === "OPTIONS") {
-//     return res.status(200).end();
-//   }
-
-//   next();
-// });
 // Debug JWT secret
 console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
 console.log("JWT_SECRET length:", process.env.JWT_SECRET?.length);
@@ -93,7 +44,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-// app.options("*", cors()); // Allow all OPTIONS requests
 
 app.use((req, res, next) => {
   if (req.method === "OPTIONS") {
@@ -106,7 +56,7 @@ app.use((req, res, next) => {
   }
   next();
 });
-// In your server.js backend
+
 // CORS configuration
 app.use(
   cors({
@@ -203,7 +153,7 @@ mongoose
       });
     });
 
-    // EXPENSES ROUTE
+    // Pagination EXPENSES ROUTE
     app.get("/expenses", async (req, res) => {
       try {
         const page = parseInt(req.query.page) || 1;
@@ -226,17 +176,18 @@ mongoose
     });
 
     // ================= STATIC FILES =================
-    //app.use(express.static(path.join(__dirname, "public/browser")), {});
     // This is crucial - serve static files correctly
     app.use(express.static(path.join(__dirname, "public", "browser")));
+    // ================= SAFE CATCH-ALL ROUTE =================
 
-    // ================= CATCH-ALL ROUTE LAST =================
-    // THIS MUST BE THE VERY LAST ROUTE!
-    // app.get("*", (req, res) => {
-    //   console.log("Catch-all route triggered for:", req.url);
-    //   res.sendFile(path.join(__dirname, "public/browser", "index.html"));
-    // });
-    console.log("All routes mounted successfully");
+    //happened express version issue npm list express path-to-regexp while caching all route
+    app.get("/*", (req, res) => {
+      if (req.url.startsWith("/api/") || req.url.includes(".")) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      console.log("Serving Angular app for:", req.url);
+      res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
+    });
 
     // ================= ERROR HANDLERS =================
     app.use((err, req, res, next) => {
@@ -289,21 +240,14 @@ function authMiddleware(req, res, next) {
     return res.status(401).json({ message: "Token verification failed" });
   }
 }
-// Use a regex pattern instead
-// app.get(/\/(.*)/, (req, res) => {
+// app.get(/^\/(?!api)/, (req, res) => {
 //   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
 // });
-// app.get("/:any", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
-// });
-// app.get("", (req, res) => {
-//   console.log("Catch-all route triggered for:", req.url);
+// // Handle common Angular routes explicitly
 
-//   // Only send index.html for non-API routes
-//   if (!req.url.startsWith("/api/")) {
+// const angularRoutes = ["/register", "/login", "/dashboard", "/profile"];
+// angularRoutes.forEach((route) => {
+//   app.get(route, (req, res) => {
 //     res.sendFile(path.join(__dirname, "public", "browser", "index.html"));
-//   } else {
-//     // For API routes that don't exist, return 404
-//     res.status(404).json({ message: "API endpoint not found" });
-//   }
+//   });
 // });
