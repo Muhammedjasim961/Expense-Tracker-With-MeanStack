@@ -24,6 +24,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { ExpenseEditComponent } from './expense-edit/expense-edit.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChartDashboardComponent } from './chart-dashboard/chart-dashboard.component';
+import { TestStyleComponent } from './test-style/test-style.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ChartDashboardComponent } from './chart-dashboard/chart-dashboard.compo
     ExpenseEditComponent,
     ProfileComponent,
     ChartDashboardComponent,
+    TestStyleComponent,
   ],
   imports: [
     BrowserModule,

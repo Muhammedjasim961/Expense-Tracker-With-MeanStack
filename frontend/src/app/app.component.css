@@ -1,0 +1,44 @@
+.test-red {
+  color: red !important;
+  font-size: 30px !important;
+  background: yellow !important;
+  padding: 20px !important;
+}
+.test-red {
+  color: red !important;
+  font-size: 30px !important;
+  background: yellow !important;
+  padding: 20px !important;
+  border: 5px solid black !important;
+  font-weight: bold !important;
+}
+
+/* Also add body styles to see global effect */
+body {
+  background-color: lightblue !important;
+  margin: 20px !important;
+}
+.app-style-test {
+  color: blue !important;
+  font-size: 24px !important;
+  background: lightgreen !important;
+  padding: 15px !important;
+  border: 3px solid orange !important;
+}
+/* Global styles - should apply to entire app */
+.test-global-red {
+  color: red !important;
+  font-size: 30px !important;
+  background: yellow !important;
+  padding: 20px !important;
+  border: 5px solid black !important;
+  margin: 10px !important;
+}
+
+/* Global body styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}

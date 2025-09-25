@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
-
+import { initFlowbite } from 'flowbite';
+declare global {
+  interface Window {
+    Flowbite: any;
+  }
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   standalone: false,
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'frontend';
   username: string | null = '';
   email: string | null = '';
@@ -37,6 +42,12 @@ export class AppComponent implements OnInit {
     // }
   }
 
+  ngAfterViewInit() {
+    // Initialize Flowbite if using npm version
+    if (typeof window !== 'undefined' && window['Flowbite']) {
+      window['Flowbite'].init();
+    }
+  }
   //  check if user email exists in localStorage
   checkUser() {
     const storedUser: any = localStorage.getItem('user');
@@ -92,6 +103,8 @@ export class AppComponent implements OnInit {
 
   // update UI whenever login/logout happens
   ngOnInit() {
+    initFlowbite();
+
     console.log('checking troubling Routes:', this.router.config);
 
     this.userService.user$.subscribe((user) => {

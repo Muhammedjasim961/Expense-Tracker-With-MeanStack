@@ -1,8 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
-@import "tailwindcss";
-@import "flowbite/src/themes/default";
-@plugin "flowbite/plugin";
-@source "../node_modules/flowbite";
+/* Tailwind CSS v3 Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
   margin: 0;
   padding: 0;
@@ -1333,3 +1332,18 @@ google-chart:hover {
     height: 40px;
   }
 }
+/* Test style - make it very obvious
+.test-red {
+  color: red !important;
+  font-size: 30px !important;
+  background: yellow !important;
+  padding: 20px !important;
+  border: 5px solid black !important;
+  font-weight: bold !important;
+}
+
+/* Also add body styles to see global effect */
+/* body {
+  background-color: lightblue !important;
+  margin: 20px !important;
+}  */
