@@ -11,7 +11,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 // Or allow all origins (for testing)
-
+app.use(cors());
 app.options("/api/auth/register", (req, res) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
