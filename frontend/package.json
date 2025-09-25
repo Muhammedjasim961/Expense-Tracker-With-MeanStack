@@ -3,10 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve ",
+    "start": "ng serve",
+    "build": "ng build",
     "build:prod": "ng build --configuration production",
-    "deploy:setup": "npm run build:prod && cp -r dist/frontend/* Backend/public/browser/",
-    "start:prod": "cd Backend && NODE_ENV=production npm start",
     "test": "ng test"
   },
   "private": true,
