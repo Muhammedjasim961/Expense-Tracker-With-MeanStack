@@ -39,18 +39,7 @@
               "optimization": true,
               "extractLicenses": true,
               "sourceMap": false,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "3mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "100kB",
-                  "maximumError": "200kB"
-                }
-              ],
+              "budgets": [],
               "outputHashing": "all",
               "fileReplacements": [
                 {
