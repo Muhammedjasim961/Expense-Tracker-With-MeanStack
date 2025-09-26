@@ -6,7 +6,6 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
-      "render-build": "cd ../frontend && npm install --package-lock-only --legacy-peer-deps && npm ci --legacy-peer-deps && npx ng build --configuration production && cd ../backend && npm install",
     "test": "ng test"
   },
   "private": true,
