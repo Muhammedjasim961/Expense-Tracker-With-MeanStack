@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
-    "build:render": "npm ci --legacy-peer-deps && npx ng cache clean && npx ng build --configuration production",
+    "render-build": "cd ../frontend && npm install --legacy-peer-deps && npx ng build --configuration production && cd ../backend && npm install",
     "test": "ng test"
   },
   "private": true,
