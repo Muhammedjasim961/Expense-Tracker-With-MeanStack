@@ -82,7 +82,7 @@
           Amount must be at least 1 characters.
         </small>
         <small *ngIf="userForm.get('amount')?.errors?.['max']">
-          Amount should be Below 1 Crore.
+          Amount should not be Below 1 Crore.
         </small>
       </div>
     </div>

@@ -58,10 +58,10 @@ export class UserFormComponent {
 
   showMessage() {
     this._snackBar.open('Expense saved successfully!', 'Close', {
-      duration: 3000,
+      duration: 1500,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
-      panelClass: ['snackbar-success'], // 👈 custom class
+      panelClass: ['snackbar-success'], //custom class here
     });
   }
 

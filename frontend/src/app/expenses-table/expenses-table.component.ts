@@ -105,13 +105,12 @@ export class ExpensesTableComponent implements OnInit, OnChanges {
           return;
         }
 
-        // Build page numbers
+        // Build page numbers in pagination like 1,2,3,4... totalPages
         this.pageNumbers = [];
         for (let i = 1; i <= this.totalPages; i++) {
           this.pageNumbers.push(i);
         }
       },
-
       error: (err) => {
         console.error('Error loading expenses:', err);
       },
@@ -139,7 +138,7 @@ export class ExpensesTableComponent implements OnInit, OnChanges {
       this.loadExpenses();
     }
   }
-  //pagination end
+  //pagination end here
   // deleteExpenses(expense: any, index: any) {
   //   const id = expense._id;
   //   this.expenseService.DeleteExpense(id).subscribe((result) => {
