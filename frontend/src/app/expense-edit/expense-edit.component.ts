@@ -67,27 +67,26 @@ export class ExpenseEditComponent implements OnInit {
     }
   }
 
-  // Called when user clicks "Update" to submit changes
   submitUpdatedExpense() {
     if (this.userForm.invalid) return;
-    this.loading = true; // Start loader ✅
+    this.loading = true; // Start loader
     const expenseId = this.route.snapshot.paramMap.get('id');
     const updatedData = { ...this.userForm.value };
-    // ✅ remove _id so MongoDB won’t throw error
+    //  remove _id so MongoDB won’t throw error
     delete updatedData._id;
     this.userService.updateExpense(expenseId, updatedData).subscribe({
       next: () => {
-        this.loading = false; // Stop loader ✅
+        this.loading = false; // Stop loader
         this.router.navigate(['dashboard']);
         this.showMessage();
       },
       error: (err) => {
-        this.loading = false; // Stop loader even on error ✅
+        this.loading = false; // Stop loader even on error
         console.error(err);
         alert('Failed to update expense ❌');
       },
       complete: () => {
-        this.loading = false; // Extra safety ✅
+        this.loading = false; // Extra safety
       },
     });
   }
@@ -95,7 +94,7 @@ export class ExpenseEditComponent implements OnInit {
   showMessage() {
     const expenseData = this.userForm.value.expense_name;
     this._snackBar.open(`${expenseData} Updated successfully!`, 'Close', {
-      duration: 3000,
+      duration: 1500,
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       panelClass: ['snackbar-success'], // 👈 custom class
